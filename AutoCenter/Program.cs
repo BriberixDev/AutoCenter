@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<AutoCenterDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
+var cs = $"Data Source={dbPath}";
+
+builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
 
 builder.Services.AddRazorPages();
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCenter.Web.Migrations
 {
     [DbContext(typeof(AutoCenterDbContext))]
-    [Migration("20250819114105_AddNewModels")]
-    partial class AddNewModels
+    [Migration("20250819133800_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,0 +1,96 @@
+﻿@page
+@model AutoCenter.Web.Pages.Listings.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Listing</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Listing.Title" class="control-label"></label>
+                <input asp-for="Listing.Title" class="form-control" />
+                <span asp-validation-for="Listing.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Description" class="control-label"></label>
+                <input asp-for="Listing.Description" class="form-control" />
+                <span asp-validation-for="Listing.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Price" class="control-label"></label>
+                <input asp-for="Listing.Price" class="form-control" />
+                <span asp-validation-for="Listing.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Listing.IsActive" /> @Html.DisplayNameFor(model => model.Listing.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Make" class="control-label"></label>
+                <input asp-for="Listing.Make" class="form-control" />
+                <span asp-validation-for="Listing.Make" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Model" class="control-label"></label>
+                <input asp-for="Listing.Model" class="form-control" />
+                <span asp-validation-for="Listing.Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Year" class="control-label"></label>
+                <input asp-for="Listing.Year" class="form-control" />
+                <span asp-validation-for="Listing.Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Color" class="control-label"></label>
+                <select asp-for="Listing.Color" class="form-control"></select>
+                <span asp-validation-for="Listing.Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Milieage" class="control-label"></label>
+                <input asp-for="Listing.Milieage" class="form-control" />
+                <span asp-validation-for="Listing.Milieage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.Vin" class="control-label"></label>
+                <input asp-for="Listing.Vin" class="form-control" />
+                <span asp-validation-for="Listing.Vin" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="Vehicle.Transmission" class="control-label"></label>
+                <select asp-for="Vehicle.Transmission" class="form-control"
+                        asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.TransmissionType>()">
+                </select>
+                <span asp-validation-for="Vehicle.Transmission" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="Listing.FuelType" class="control-label"></label>
+                <select asp-for="Listing.FuelType" class="form-control"></select>
+                <span asp-validation-for="Listing.FuelType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Listing.BodyType" class="control-label"></label>
+                <select asp-for="Listing.BodyType" class="form-control"></select>
+                <span asp-validation-for="Listing.BodyType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

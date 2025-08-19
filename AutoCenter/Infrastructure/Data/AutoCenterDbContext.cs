@@ -9,11 +9,8 @@ namespace AutoCenter.Web.Infrastructure.Data
             : base(options)
         { }
         public DbSet<User> Users { get; set; }= null!;
-
-        // Define DbSet properties for your entities here
-        // public DbSet<User> Users { get; set; }
-        // public DbSet<Vehicle> Vehicles { get; set; }
-        // Add other DbSet properties as needed
-        // You can also override OnConfiguring and OnModelCreating methods if necessary
+        public DbSet<AgencyUser> AgencyUsers { get; set; } = null!;
+        public DbSet<Listing> Listings { get; set; } = null!;
+        public DbSet<Vehicle> Vehicles { get; set; } = null!;
     }
 }

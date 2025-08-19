@@ -6,7 +6,8 @@
         
         public required string Name { get; set; }
         public required string Email { get; set; }
-
-        // Additional properties can be added as needed
+        public string? PhoneNumber { get; set; }
+        public bool Role { get; set; }=false;
+        public DateTime RegistrationDate { get; private set; } = DateTime.Now;
     }
 }

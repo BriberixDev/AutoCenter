@@ -1,17 +1,19 @@
-﻿namespace AutoCenter.Web.Models
+﻿using AutoCenter.Web.Enums;
+
+namespace AutoCenter.Web.Models
 {
     public class Vehicle
     {
         public int Id { get; set; }
-        public required string Make { get; set; } = string.Empty;
-        public required string Model { get; set; } = string.Empty;
-        public required string Year { get; set; } = string.Empty;
-        public required string Color { get; set; } = string.Empty;
-        public required string Milieage { get; set; } = string.Empty;
-        public required string Vin { get; set; } = string.Empty;
-        public required string Transmission { get; set; } = string.Empty;
-        public required string FuelType { get; set; } = string.Empty;
-        public required string BodyType { get; set; } = string.Empty;
+        public string Make { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public string Year { get; set; } = string.Empty;
+        public VehicleColor Color { get; set; }
+        public string Milieage { get; set; } = string.Empty;
+        public string Vin { get; set; } = string.Empty;
+        public TransmissionType Transmission { get; set; }
+         public FuelType FuelType { get; set; }
+         public BodyType BodyType { get; set; }
 
 
     }

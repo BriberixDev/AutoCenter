@@ -1,0 +1,108 @@
+﻿@page
+@model AutoCenter.Web.Pages.Listings.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Make)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Milieage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Vin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Transmission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].FuelType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].BodyType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Listing) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Make)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Milieage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transmission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FuelType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyType)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

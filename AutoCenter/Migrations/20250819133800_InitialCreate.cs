@@ -6,62 +6,32 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoCenter.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNewModels : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "AgencyAddress",
-                table: "Users",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "AgencyName",
-                table: "Users",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "CompanyId",
-                table: "Users",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
-                table: "Users",
-                type: "TEXT",
-                maxLength: 13,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "PhoneNumber",
-                table: "Users",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "RegistrationDate",
-                table: "Users",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<bool>(
-                name: "Role",
-                table: "Users",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<string>(
-                name: "WebsiteUrl",
-                table: "Users",
-                type: "TEXT",
-                nullable: true);
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    Role = table.Column<bool>(type: "INTEGER", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
+                    AgencyName = table.Column<string>(type: "TEXT", nullable: true),
+                    AgencyAddress = table.Column<string>(type: "TEXT", nullable: true),
+                    CompanyId = table.Column<string>(type: "TEXT", nullable: true),
+                    WebsiteUrl = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Vehicles",
@@ -134,39 +104,10 @@ namespace AutoCenter.Web.Migrations
                 name: "Listings");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Vehicles");
-
-            migrationBuilder.DropColumn(
-                name: "AgencyAddress",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "AgencyName",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "CompanyId",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "Discriminator",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "PhoneNumber",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "RegistrationDate",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "Role",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "WebsiteUrl",
-                table: "Users");
         }
     }
 }

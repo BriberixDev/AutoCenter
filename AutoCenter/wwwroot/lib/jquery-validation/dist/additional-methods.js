@@ -1447,12 +1447,12 @@ $.validator.addMethod( "url2", function( value, element ) {
 }, $.validator.messages.url );
 
 /**
- * Return true, if the value is a valid vehicle identification number (VIN).
+ * Return true, if the value is a valid VehicleSpecs identification number (VIN).
  *
  * Works with all kind of text inputs.
  *
- * @example <input type="text" size="20" name="VehicleID" class="{required:true,vinUS:true}" />
- * @desc Declares a required input element whose value must be a valid vehicle identification number.
+ * @example <input type="text" size="20" name="VehicleSpecsID" class="{required:true,vinUS:true}" />
+ * @desc Declares a required input element whose value must be a valid VehicleSpecs identification number.
  *
  * @name $.validator.methods.vinUS
  * @type Boolean
@@ -1499,7 +1499,7 @@ $.validator.addMethod( "vinUS", function( v ) {
 		return true;
 	}
 	return false;
-}, "The specified vehicle identification number (VIN) is invalid." );
+}, "The specified VehicleSpecs identification number (VIN) is invalid." );
 
 $.validator.addMethod( "zipcodeUS", function( value, element ) {
 	return this.optional( element ) || /^\d{5}(-\d{4})?$/.test( value );

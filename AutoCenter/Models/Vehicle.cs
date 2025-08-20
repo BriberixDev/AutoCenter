@@ -11,7 +11,7 @@ namespace AutoCenter.Web.Models
         public VehicleColor Color { get; set; }
         public string Milieage { get; set; } = string.Empty;
         public string Vin { get; set; } = string.Empty;
-        public TransmissionType Transmission { get; set; }
+        public TransmissionType? Transmission { get; set; }
          public FuelType FuelType { get; set; }
          public BodyType BodyType { get; set; }
 

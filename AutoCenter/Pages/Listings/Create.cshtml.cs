@@ -25,16 +25,15 @@ namespace AutoCenter.Web.Pages.Listings
         }
 
         [BindProperty]
-        public Listing Listing { get; set; } = default!;
+        public Listing Listing { get; set; } = new() { Vehicle = new Vehicle() };
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return Page();
             }
-
             _context.Listings.Add(Listing);
             await _context.SaveChangesAsync();
 

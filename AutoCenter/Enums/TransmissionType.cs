@@ -5,14 +5,14 @@ namespace AutoCenter.Web.Enums
     public enum TransmissionType
     {
         [Display(Name = "Manual")]
-        Manual = 1,
+        Manual,
         [Display(Name = "Automatic")]
-        Automatic = 2,
+        Automatic,
         [Display(Name = "Semi-Automatic")]
-        SemiAutomatic = 3,
+        SemiAutomatic,
         [Display(Name = "Continuously Variable Transmission (CVT)")]
-        CVT = 4,
+        CVT,
         [Display(Name = "DSG/DCT")]
-        DualClutch = 5
+        DualClutch
     }
 }

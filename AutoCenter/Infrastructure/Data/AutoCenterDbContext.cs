@@ -8,9 +8,9 @@ namespace AutoCenter.Web.Infrastructure.Data
         public AutoCenterDbContext(DbContextOptions<AutoCenterDbContext> options)
             : base(options)
         { }
-        public DbSet<User> Users { get; set; }= null!;
-        public DbSet<AgencyUser> AgencyUsers { get; set; } = null!;
-        public DbSet<Listing> Listings { get; set; } = null!;
-        public DbSet<Vehicle> Vehicles { get; set; } = null!;
+        public DbSet<User> Users { get; set; }
+        public DbSet<AgencyUser> AgencyUsers { get; set; } 
+        public DbSet<Listing> Listings { get; set; } 
+        public DbSet<Vehicle> Vehicles { get; set; } 
     }
 }

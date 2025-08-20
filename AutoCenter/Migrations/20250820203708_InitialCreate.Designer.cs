@@ -2,6 +2,7 @@
 using AutoCenter.Web.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCenter.Web.Migrations
 {
     [DbContext(typeof(AutoCenterDbContext))]
-    partial class AutoCenterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250820203708_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.19");
@@ -39,16 +42,6 @@ namespace AutoCenter.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Listings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            Description = "A sleek and stylish coupe",
-                            IsActive = true,
-                            Price = 12000m,
-                            Title = "BMW 320i Coupe"
-                        });
                 });
 
             modelBuilder.Entity("AutoCenter.Web.Models.Listing", b =>
@@ -96,21 +89,6 @@ namespace AutoCenter.Web.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("ListingId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    ListingId = 2,
-                                    BodyType = 3,
-                                    Color = 1,
-                                    FuelType = 0,
-                                    Make = "BMW",
-                                    Mileage = "150000",
-                                    Model = "320i",
-                                    Transmission = 1,
-                                    Vin = "WBAVC31050KT12345",
-                                    Year = "2013"
-                                });
                         });
 
                     b.Navigation("VehicleSpecs")

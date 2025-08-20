@@ -25,7 +25,7 @@ namespace AutoCenter.Web.Pages.Listings
         }
 
         [BindProperty]
-        public Listing Listing { get; set; } = new() { Vehicle = new Vehicle() };
+        public Listing Listing { get; set; } = new() { VehicleSpecs = new VehicleSpecsSpecs() };
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()

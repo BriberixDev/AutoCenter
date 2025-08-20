@@ -26,31 +26,31 @@
                 @Html.DisplayNameFor(model => model.Listing[0].IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Make)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Make)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Model)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Model)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Year)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Color)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Color)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Milieage)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Mileage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Vin)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Vin)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].Transmission)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Transmission)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].FuelType)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.FuelType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].BodyType)
+                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.BodyType)
             </th>
             <th></th>
         </tr>
@@ -71,31 +71,31 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Make)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Make)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Model)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Model)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Year)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Color)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Color)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Milieage)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Mileage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Vin)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Vin)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Transmission)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Transmission)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FuelType)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.FuelType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BodyType)
+                    @Html.DisplayFor(modelItem => item.VehicleSpecs.BodyType)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

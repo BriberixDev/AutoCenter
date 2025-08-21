@@ -6,14 +6,14 @@ namespace AutoCenter.Web.Enums
     public enum FuelType
     {
         [Display(Name = "Petrol")]
-        Petrol,
+        Petrol=1,
         [Display(Name = "Diesel")]
-        Diesel,
+        Diesel=2,
         [Display(Name = "Electric")]
-        Electric,
+        Electric=3,
         [Display(Name = "Hybrid")]
-        Hybrid,
+        Hybrid=4,
         [Display(Name = "Gas")]
-        Gas
+        Gas=5
     }
 }

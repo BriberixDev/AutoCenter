@@ -1,18 +1,19 @@
 ﻿using AutoCenter.Web.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoCenter.Web.Models
 {
     public class VehicleSpecsSpecs
     {
-        public string Make { get; set; } = string.Empty;
-        public string Model { get; set; } = string.Empty;
-        public string Year { get; set; } = string.Empty;
-        public VehicleSpecsColor? Color { get; set; }
-        public string Mileage { get; set; } = string.Empty;
-        public string Vin { get; set; } = string.Empty;
-        public TransmissionType? Transmission { get; set; }
-         public FuelType? FuelType { get; set; }
-         public BodyType? BodyType { get; set; }
+        [Required]public string Make { get; set; } = string.Empty;
+        [Required]public string Model { get; set; } = string.Empty;
+        [Required,Range(1930,2026)]public string Year { get; set; } = string.Empty;
+        [Required]public VehicleSpecsColor? Color { get; set; }
+        [Required,Range(0,999)]public string Mileage { get; set; } = string.Empty;
+        [Required,StringLength(32)]public string Vin { get; set; } = string.Empty;
+        [Required]public TransmissionType? Transmission { get; set; }
+        [Required]public FuelType? FuelType { get; set; }
+        [Required]public BodyType? BodyType { get; set; }
 
 
     }

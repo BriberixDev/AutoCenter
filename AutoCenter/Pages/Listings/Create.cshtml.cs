@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoCenter.Web.Infrastructure.Data;
+using AutoCenter.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using AutoCenter.Web.Infrastructure.Data;
-using AutoCenter.Web.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AutoCenter.Web.Pages.Listings
 {
@@ -18,26 +19,30 @@ namespace AutoCenter.Web.Pages.Listings
         {
             _context = context;
         }
-
+        [BindProperty]
+        public Listing Listing { get; set; } = new Listing();
         public IActionResult OnGet()
         {
             return Page();
         }
-
-        [BindProperty]
-        public Listing Listing { get; set; } = new() { VehicleSpecs = new VehicleSpecsSpecs() };
-
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return Page();
             }
-            _context.Listings.Add(Listing);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            try
+            {
+                _context.Listings.Add(Listing);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError(string.Empty, "Failed to save. Try again.");
+                return Page();
+            }
         }
+
     }
 }

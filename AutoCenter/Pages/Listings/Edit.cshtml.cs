@@ -20,58 +20,5 @@ namespace AutoCenter.Web.Pages.Listings
             _context = context;
         }
 
-        [BindProperty]
-        public Listing Listing { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var listing =  await _context.Listings.FirstOrDefaultAsync(m => m.Id == id);
-            if (listing == null)
-            {
-                return NotFound();
-            }
-            Listing = listing;
-            return Page();
-        }
-
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Listing).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ListingExists(Listing.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool ListingExists(int id)
-        {
-            return _context.Listings.Any(e => e.Id == id);
-        }
     }
 }

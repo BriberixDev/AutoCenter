@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AutoCenter.Web.Models
 {
-    public class VehicleSpecsSpecs
+    public class VehicleSpecs
     {
         [Required]public string Make { get; set; } = string.Empty;
         [Required]public string Model { get; set; } = string.Empty;

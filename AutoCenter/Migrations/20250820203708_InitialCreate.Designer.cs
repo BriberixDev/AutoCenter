@@ -46,7 +46,7 @@ namespace AutoCenter.Web.Migrations
 
             modelBuilder.Entity("AutoCenter.Web.Models.Listing", b =>
                 {
-                    b.OwnsOne("AutoCenter.Web.Models.VehicleSpecsSpecs", "VehicleSpecs", b1 =>
+                    b.OwnsOne("AutoCenter.Web.Models.VehicleSpecs", "VehicleSpecs", b1 =>
                         {
                             b1.Property<int>("ListingId")
                                 .HasColumnType("INTEGER");

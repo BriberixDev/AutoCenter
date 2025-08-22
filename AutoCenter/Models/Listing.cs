@@ -15,7 +15,7 @@ namespace AutoCenter.Web.Models
 
         //public required DateTime CreatedAt { get; set; } = DateTime.Now;
         //public required DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public  VehicleSpecsSpecs VehicleSpecs { get; set; }=new();
+        public  VehicleSpecs VehicleSpecs { get; set; }=new();
 
     }
 

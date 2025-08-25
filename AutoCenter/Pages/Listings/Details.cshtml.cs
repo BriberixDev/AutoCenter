@@ -19,25 +19,6 @@ namespace AutoCenter.Web.Pages.Listings
             _context = context;
         }
 
-        public Listing Listing { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var listing = await _context.Listings.FirstOrDefaultAsync(m => m.Id == id);
-            if (listing == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Listing = listing;
-            }
-            return Page();
-        }
+        
     }
 }

@@ -20,3 +20,37 @@ html {
 body {
   margin-bottom: 60px;
 }
+.car-gallery {
+    display: flex;
+    flex-wrap: wrap; /* перенос на новую строку, если не помещается */
+    gap: 15px; /* отступы между карточками */
+    justify-content: center; /* по центру */
+    margin-top: 20px;
+}
+
+.car-card {
+    width: 220px; /* фиксированная ширина */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    font-size: 14px;
+}
+
+    .car-card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover; /* чтобы картинка не растягивалась */
+    }
+
+    .car-card h4 {
+        margin: 8px 0 4px;
+        font-size: 16px;
+    }
+
+    .car-card p {
+        margin: 0 0 10px;
+        color: #555;
+    }

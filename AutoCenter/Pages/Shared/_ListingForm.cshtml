@@ -1,0 +1,106 @@
+﻿@model AutoCenter.Web.Models.Listing
+@{
+}
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" />
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Make" class="control-label"></label>
+                <input asp-for="VehicleSpecs.Make" class="form-control" />
+                <span asp-validation-for="VehicleSpecs.Make" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Model" class="control-label"></label>
+                <input asp-for="VehicleSpecs.Model" class="form-control" />
+                <span asp-validation-for="VehicleSpecs.Model" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Year" class="control-label"></label>
+                <input asp-for="VehicleSpecs.Year" class="form-control" />
+                <span asp-validation-for="VehicleSpecs.Year" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Color" class="control-label"></label>
+                <select asp-for="VehicleSpecs.Color"
+                        asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.VehicleSpecsColor>()"
+                        class="form-control">
+                    <option value="" selected disabled hidden>— Choose color —</option>
+                </select>
+                <span asp-validation-for="VehicleSpecs.Color" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Mileage" class="control-label"></label>
+                <input asp-for="VehicleSpecs.Mileage" class="form-control" />
+                <span asp-validation-for="VehicleSpecs.Mileage" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Vin" class="control-label"></label>
+                <input asp-for="VehicleSpecs.Vin" class="form-control" />
+                <span asp-validation-for="VehicleSpecs.Vin" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.Transmission" class="control-label"></label>
+                <select asp-for="VehicleSpecs.Transmission"
+                        asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.TransmissionType>()"
+                        class="form-control">
+                    <option value="" selected disabled hidden>— Choose transmission —</option>
+                </select>
+                <span asp-validation-for="VehicleSpecs.Transmission" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.FuelType" class="control-label"></label>
+                <select asp-for="VehicleSpecs.FuelType"
+                        asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.FuelType>()"
+                        class="form-control">
+                    <option value="" selected disabled hidden>— Choose fuel type —</option>
+                </select>
+                <span asp-validation-for="VehicleSpecs.FuelType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VehicleSpecs.BodyType" class="control-label"></label>
+                <select asp-for="VehicleSpecs.BodyType"
+                        asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.BodyType>()"
+                        class="form-control">
+                    <option value="" selected disabled hidden>— Choose body type —</option>
+                </select>
+                <span asp-validation-for="VehicleSpecs.BodyType" class="text-danger"></span>
+            </div>
+
+        </form>
+    </div>
+</div>

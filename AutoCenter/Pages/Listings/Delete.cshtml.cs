@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AutoCenter.Web.Pages.Listings
 {
@@ -18,46 +19,38 @@ namespace AutoCenter.Web.Pages.Listings
         {
             _context = context;
         }
-
         [BindProperty]
-        public Listing Listing { get; set; } = default!;
-
+        public Listing Listing { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var listing = await _context.Listings.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (listing == null)
+            Listing = await _context.Listings
+    .Include(l => l.VehicleSpecs)
+    .FirstOrDefaultAsync(m => m.Id == id);
+            if (Listing == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                Listing = listing;
             }
             return Page();
         }
-
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null)
+            if(id==null)
             {
                 return NotFound();
             }
-
-            var listing = await _context.Listings.FindAsync(id);
-            if (listing != null)
+            Listing = await _context.Listings.FindAsync(id);
+            if (Listing != null)
             {
-                Listing = listing;
                 _context.Listings.Remove(Listing);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToPage("./Index");
         }
+
+
     }
 }

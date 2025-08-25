@@ -5,18 +5,18 @@ namespace AutoCenter.Web.Enums
     public enum BodyType
     {
         [Display(Name = "Sedan")]
-        Sedan,
+        Sedan=1,
 
         [Display(Name = "Hatchback")]
-        Hatchback,
+        Hatchback=2,
 
         [Display(Name = "Wagon")]
-        Wagon,
+        Wagon=3,
 
         [Display(Name = "Coupe")]
-        Coupe,
+        Coupe=4,
 
         [Display(Name = "SUV")]
-        SUV
+        SUV=5
     }
 }

@@ -4,18 +4,21 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    @if (Model.Listings?.Any() == true)
-    {
-        @foreach (var listing in Model.Listings)
+<div class="table-responsive">
+    <div class="car-gallery">
+        @if (Model.Listings?.Any() == true)
         {
-            @await Html.PartialAsync("_CarCard", listing)
+            @foreach (var listing in Model.Listings)
+            {
+                @await Html.PartialAsync("_CarCard", listing)
+            }
         }
-    }
-    else
-    {
-        <p>There is no listings.</p>
-    }
+        else
+        {
+            <p>There is no listings.</p>
+        }
+    </div>
+    
 </div>
 
 <div id="myModal" class="modal">

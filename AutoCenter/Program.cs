@@ -11,12 +11,9 @@ builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddAuthentication().AddCookie("MyCookieAuth", options =>
+builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
 {
     options.Cookie.Name = "MyCookieAuth";
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 
 var app = builder.Build();
@@ -34,6 +31,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

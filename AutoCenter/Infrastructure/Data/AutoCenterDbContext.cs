@@ -1,11 +1,12 @@
 ﻿using AutoCenter.Web.Enums;
 using AutoCenter.Web.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 
 namespace AutoCenter.Web.Infrastructure.Data
 {
-    public class AutoCenterDbContext:DbContext
+    public class AutoCenterDbContext:IdentityDbContext
     {
         public AutoCenterDbContext(DbContextOptions<AutoCenterDbContext> options)
             : base(options)

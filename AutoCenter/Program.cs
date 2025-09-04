@@ -1,4 +1,6 @@
 using AutoCenter.Web.Infrastructure.Data;
+using AutoCenter.Web.Services;
+using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,17 +23,19 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options=>
         options.Lockout.MaxFailedAccessAttempts=5;
         options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(15);
 
+        options.SignIn.RequireConfirmedEmail=true;
         options.User.RequireUniqueEmail=true;
     })
-    .AddEntityFrameworkStores<AutoCenterDbContext>();
+    .AddEntityFrameworkStores<AutoCenterDbContext>().AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.Name = "MyCookieAuth";
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Error";
 });
 
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SMTP"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,7 +8,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
     {
         public async Task<IActionResult> OnPostAsync()
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            await HttpContext.SignOutAsync("MyCookieAuth");
             return RedirectToPage("/Account/Login");
         }
     }

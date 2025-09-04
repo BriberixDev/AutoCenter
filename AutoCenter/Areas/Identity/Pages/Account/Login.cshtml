@@ -2,6 +2,8 @@
 @model AutoCenter.Web.Areas.Identity.Pages.Account.LoginModel
 @{
 }
+<h3>User login</h3>
+<br />
 <div class="container border" style="padding:20px">
     <form method="post">
         <div class="text-danger" asp-validation-summary="All"></div>
@@ -37,6 +39,7 @@
                 <input type="submit" class="btn btn-primary" value="Login" />
             </div>
             <div class="col-5">
+                <a class="btn btn-link" href="./Register">Sign Up</a>
             </div>
         </div>
     </form>

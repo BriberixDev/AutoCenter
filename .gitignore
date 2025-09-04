@@ -354,6 +354,16 @@ ASALocalRun/
 healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
+# local secrets & env
+appsettings.Development.json
+appsettings.*.local.json
+secrets.json
+.env
+
+# local DB artifacts
+*.db
+*.db-wal
+*.db-shm
 MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder

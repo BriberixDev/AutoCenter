@@ -1,7 +1,9 @@
-﻿@page
+@page
 @model AutoCenter.Web.Areas.Identity.Pages.Account.LoginModel
 @{
 }
+<h3>User login</h3>
+<br />
 <div class="container border" style="padding:20px">
     <form method="post">
         <div class="text-danger" asp-validation-summary="All"></div>
@@ -14,7 +16,6 @@
                 <span class="text-danger" asp-validation-for="Input.UserName"></span>
             </div>
         </div>
-
         <div class="mb-3 row">
             <div class="col-2">
                 <label asp-for="Input.Password"></label>
@@ -24,11 +25,20 @@
                 <span class="text-danger" asp-validation-for="Input.Password"></span>
             </div>
         </div>
+        <div class="mb-3 row form-check">
+            <div class="col-2">
+                <input type="checkbox" class="form-check-input" asp-for="Input.RememberMe" />
+                <label class="form-check-label" asp-for="Input.RememberMe"></label>
+            </div>
+            <div class="col-5">
+            </div>
+        </div>
         <div class="mb-3 row">
             <div class="col-2">
                 <input type="submit" class="btn btn-primary" value="Login" />
             </div>
             <div class="col-5">
+                <a class="btn btn-link" href="./Register">Sign Up</a>
             </div>
         </div>
     </form>

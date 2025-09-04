@@ -1,4 +1,7 @@
 using AutoCenter.Web.Infrastructure.Data;
+using AutoCenter.Web.Services;
+using AutoCenter.Web.Settings;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,18 +14,36 @@ builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options=>
+    {
+        options.Password.RequiredLength = 8;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+
+        options.Lockout.MaxFailedAccessAttempts=5;
+        options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(15);
+
+        options.SignIn.RequireConfirmedEmail=true;
+        options.User.RequireUniqueEmail=true;
+    })
+    .AddEntityFrameworkStores<AutoCenterDbContext>().AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.Name = "MyCookieAuth";
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Error";
 });
 
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SMTP"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

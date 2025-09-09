@@ -1,4 +1,5 @@
 using AutoCenter.Web.Infrastructure.Data;
+using AutoCenter.Web.Infrastructure.Data.Seed;
 using AutoCenter.Web.Services;
 using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -36,16 +37,26 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SMTP"));
 builder.Services.AddSingleton<IEmailService, EmailService>();
+
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
+
+using (var scope = app.Services.CreateScope())
 {
-    app.UseDeveloperExceptionPage();
+    var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
+    await db.Database.MigrateAsync();
+
+    var seeder = new CarBrandSeeder(db);
+    await seeder.SeedAsync();
 }
-else
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Error");
+        app.UseHsts();
+    }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

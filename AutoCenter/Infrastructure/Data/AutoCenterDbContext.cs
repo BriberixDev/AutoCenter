@@ -24,8 +24,7 @@ namespace AutoCenter.Web.Infrastructure.Data
         //public DbSet<User> Users { get; set; }
         //public DbSet<AgencyUser> AgencyUsers { get; set; } 
         public DbSet<Listing> Listings => Set<Listing>();
-        public DbSet<Brand> Brands => Set<Brand>();
-        public DbSet<CarModel> CarModels => Set<CarModel>();
+        public DbSet<Brand> CarBrands => Set<Brand>();
 
     }
 }

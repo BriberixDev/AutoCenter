@@ -1,4 +1,5 @@
 ﻿using AutoCenter.Web.Enums;
+using AutoCenter.Web.Infrastructure.Data.Seed;
 using AutoCenter.Web.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,7 @@ namespace AutoCenter.Web.Infrastructure.Data
         //public DbSet<User> Users { get; set; }
         //public DbSet<AgencyUser> AgencyUsers { get; set; } 
         public DbSet<Listing> Listings => Set<Listing>();
+        public DbSet<Brand> CarBrands => Set<Brand>();
 
     }
 }

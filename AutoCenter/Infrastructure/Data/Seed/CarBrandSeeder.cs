@@ -6,7 +6,8 @@ namespace AutoCenter.Web.Infrastructure.Data.Seed
     public class CarBrandSeeder
     {
         private readonly AutoCenterDbContext _context;
-        public CarBrandSeeder (AutoCenterDbContext autoCenterDbContext)
+
+        public CarBrandSeeder(AutoCenterDbContext autoCenterDbContext)
         {
             _context = autoCenterDbContext;
         }
@@ -18,23 +19,33 @@ namespace AutoCenter.Web.Infrastructure.Data.Seed
             "Mercedes-Benz",
             "Porsche"
         };
+
         public async Task SeedAsync()
         {
-            var existing = await _context.Brands
-               .Select(m => m.Name)
-               .ToListAsync();  
+            var existingNames = await _context.CarBrands
+                .Select(m => m.Name)
+                .ToListAsync();
+
+            var existing = new HashSet<string>(
+                existingNames.Select(NormalizeName),
+                StringComparer.OrdinalIgnoreCase
+            );
 
             var newMakes = BrandNames
-                .Where(m => !existing.Contains(m))
-                .Select(m => new Brand { Name = m })
+                .Select(NormalizeName)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Where(n => !existing.Contains(n))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(n => new Brand { Name = n })
                 .ToList();
 
-            if (newMakes.Any())
-                {
-                await _context.Brands.AddRangeAsync(newMakes); //Add all changes to AutoCenterDbContext
-                await _context.SaveChangesAsync();
-            }
+            if (newMakes.Count == 0) return;
+
+            await _context.CarBrands.AddRangeAsync(newMakes);
+            await _context.SaveChangesAsync();
         }
-        
+
+        private static string NormalizeName(string name) =>
+            string.IsNullOrWhiteSpace(name) ? string.Empty : name.Trim();
     }
 }

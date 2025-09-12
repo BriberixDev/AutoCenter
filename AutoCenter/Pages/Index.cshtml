@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Home page";
 }
+@* <partial name="_SearchForm" model="new SearchModel()" /> *@
 
 <div class="table-responsive">
     <div class="car-gallery">
@@ -15,10 +16,9 @@
         }
         else
         {
-            <p>There is no listings.</p>
+            <div class="alert alert-info my-3">No listings yet.</div>
         }
     </div>
-    
 </div>
 
 <div id="myModal" class="modal">

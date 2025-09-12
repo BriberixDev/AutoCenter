@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoCenter.Pages
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -17,13 +16,16 @@ namespace AutoCenter.Pages
             _logger = logger;
             _context = context;
         }
-
-        public List<Listing> Listings { get; set; } = new();
+        public List<Listing> Listings { get;private set; } = new();
 
         public async Task OnGetAsync()
         {
             Listings = await _context.Listings
-                .Include(l => l.VehicleSpecs)
+                .AsNoTracking()
+                .Include(l => l.Vehicle).ThenInclude(vs => vs.Brand)
+                .Include(l => l.Vehicle).ThenInclude(vs => vs.CarModel)
+                .OrderByDescending(l => l.Id)
+                .Take(24)
                 .ToListAsync();
         }
     }

@@ -5,6 +5,9 @@
             public int Id { get; set; }
             public int BrandId { get; set; }
             public string Name { get; set; } = null!;
+
+
             public Brand Brand { get; set; } = null!;
+            public VehicleSpec Spec { get; set; } = null!;
         }
     }

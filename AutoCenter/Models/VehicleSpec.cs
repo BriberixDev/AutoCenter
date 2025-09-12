@@ -5,6 +5,7 @@ namespace AutoCenter.Web.Models
 {
     public class VehicleSpec
     {
+        public int Id { get; set; }
         [Required]public int BrandId { get; set; }
         public Brand? Brand { get; set; } = null!;
         [Required]public int CarModelId { get; set; }

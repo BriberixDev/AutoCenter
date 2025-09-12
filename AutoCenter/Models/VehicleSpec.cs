@@ -3,15 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AutoCenter.Web.Models
 {
-    public class VehicleSpecs
+    public class VehicleSpec
     {
         [Required]public int BrandId { get; set; }
-        public Brand Brand { get; set; }=null!;
-        [Required]public string Model { get; set; } = string.Empty;
-        [Required,Range(1930,2025)]public string Year { get; set; } = string.Empty;
-        [Required, Range(0, 999)] public string Mileage { get; set; } = string.Empty;
+        public Brand? Brand { get; set; } = null!;
+        [Required]public int CarModelId { get; set; }
+        public CarModel? CarModel { get; set; }
+        [Required,Range(1930,2025)]public int Year { get; set; } 
+        [Required, Range(0, 999)] public int Mileage { get; set; } 
 
-        //[Required]public VehicleSpecsColor? Color { get; set; }
+        //[Required]public VehicleSpecColor? Color { get; set; }
         [Required,StringLength(32)]public string Vin { get; set; } = string.Empty;
         [Required]public TransmissionType? Transmission { get; set; }
         [Required]public FuelType? FuelType { get; set; }

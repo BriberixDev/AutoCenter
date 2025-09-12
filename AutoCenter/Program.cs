@@ -45,8 +45,10 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
     await db.Database.MigrateAsync();
 
-    var seeder = new CarBrandSeeder(db);
-    await seeder.SeedAsync();
+    var brandSeeder = new CarBrandSeeder(db);
+    await brandSeeder.SeedAsync();
+    var modelSeeder = new CarModelSeeder(db);
+    await modelSeeder.SeedAsync();
 }
     if (app.Environment.IsDevelopment())
     {

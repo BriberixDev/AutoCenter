@@ -28,7 +28,7 @@ namespace AutoCenter.Web.Pages.Listings
                 return NotFound();
             }
             Listing = await _context.Listings
-    .Include(l => l.VehicleSpecs)
+    .Include(l => l.Vehicle)
     .FirstOrDefaultAsync(m => m.Id == id);
             if (Listing == null)
             {

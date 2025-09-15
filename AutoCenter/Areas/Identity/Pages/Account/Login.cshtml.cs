@@ -1,3 +1,4 @@
+using AutoCenter.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager)
         {
             this.signInManager = signInManager;
         }

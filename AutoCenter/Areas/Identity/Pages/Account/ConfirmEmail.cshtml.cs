@@ -1,4 +1,5 @@
-        using Microsoft.AspNetCore.Identity;
+using AutoCenter.Web.Models;
+using Microsoft.AspNetCore.Identity;
         using Microsoft.AspNetCore.Mvc;
         using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,9 +10,9 @@
                 [BindProperty]
                 public string Message { get; set; } = string.Empty;
 
-                private readonly UserManager<IdentityUser> userManager;
+                private readonly UserManager<ApplicationUser> userManager;
 
-                public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+                public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
                 {
                     this.userManager = userManager;
                 }

@@ -1,3 +1,4 @@
+using AutoCenter.Web.Models;
 using AutoCenter.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +11,16 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IEmailService emailService;
 
-        public RegisterModel(UserManager<IdentityUser> userManager,IEmailService emailService)
+        public RegisterModel(UserManager<ApplicationUser> userManager,IEmailService emailService)
         {
             this.userManager = userManager;
             this.emailService = emailService;
         }
         [BindProperty]
-        public RegisterViewModel RegisterViewModel { get; set; } = new RegisterViewModel();
+        public RegisterViewModel Input { get; set; } = new RegisterViewModel();
         public void OnGet()
         {
         }
@@ -29,12 +30,13 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
             {
                 return Page();
             }
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
-                UserName = RegisterViewModel.Email,
-                Email = RegisterViewModel.Email,
+                UserName = Input.Email,
+                Email = Input.Email,
+                Name = Input.Email
             };
-            var result = await this.userManager.CreateAsync(user, RegisterViewModel.Password);
+            var result = await this.userManager.CreateAsync(user, Input.Password);
             if (result.Succeeded)
             {
                 var confirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -49,10 +51,8 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
             }
             else
             {
-                foreach(var error in result.Errors)
-                {
-                    ModelState.AddModelError("Register", error.Description);
-                }
+                foreach (var e in result.Errors)
+                    ModelState.AddModelError(string.Empty, e.Description);
                 return Page();
             }
         }

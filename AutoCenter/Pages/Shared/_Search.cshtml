@@ -1,4 +1,94 @@
-﻿@model AutoCenter.Web.Pages.Shared._SearchModel
+﻿@model AutoCenter.Web.Dtos.Search.SearchFiltersDto
 @{
 }
 
+
+<form method="get" class="mb-3">
+    <button class="btn btn-primary mt-2" type="submit">Search</button>
+
+    <div class="col-md-4">
+        <label asp-for="BrandId" class="form-label">Brand</label>
+        <select asp-for="BrandId"
+                asp-items="Model.Brands"
+                class="form-select"
+                id="BrandId">
+            <option value="">Any brand</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="ModelId" class="form-label">Model</label>
+        <select class="form-select"
+                asp-for="ModelId"
+                id="ModelId"
+                    disabled>
+            <option value="" disabled selected>Any Model</option>
+            @if(Model.Models?.Any() == true)
+            {
+                foreach (var m in Model.Models)
+                {
+                    <option value="@m.Value">@m.Text</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MinYear" class="control-label"></label>
+        <input asp-for="MinYear" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxYear" class="control-label"></label>
+        <input asp-for="MaxYear" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MinPrice" class="control-label"></label>
+        <input asp-for="MinPrice" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxPrice" class="control-label"></label>
+        <input asp-for="MaxPrice" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MinMileage"  class="control-label"></label>
+        <input asp-for="MinMileage" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxMileage" class="control-label"></label>
+        <input asp-for="MaxMileage" class="form-control" />
+    </div>
+</form>
+
+<script>
+    (function () {
+      const brand = document.getElementById('BrandId');
+      const model = document.getElementById('ModelId');
+
+      function resetModels() {
+        model.innerHTML = '<option value="">Any model</option>';
+      }
+         if (brand.value) {
+      model.disabled = false;
+    }
+
+      brand.addEventListener('change', async function () {
+        const id = this.value;
+        resetModels();
+
+        if (!id) return;
+
+        const resp = await fetch(`?handler=Models&brandId=${encodeURIComponent(id)}`, { method: 'GET' });
+        if (!resp.ok) return;
+
+        const data = await resp.json();
+        for (const m of data) {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = m.name;
+          model.appendChild(opt);
+        }
+        model.value = '';
+        model.disabled = false;
+      });
+    })();
+</script>

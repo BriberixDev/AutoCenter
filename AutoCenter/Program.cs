@@ -1,5 +1,6 @@
 using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Infrastructure.Data.Seed;
+using AutoCenter.Web.Models;
 using AutoCenter.Web.Services;
 using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
 var cs = $"Data Source={dbPath}";
 
@@ -15,9 +16,9 @@ builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options=>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
     {
-        options.Password.RequiredLength = 8;
+        options.Password.RequiredLength = 6;
         options.Password.RequireUppercase = true;
         options.Password.RequireLowercase = true;
 
@@ -53,7 +54,11 @@ using (var scope = app.Services.CreateScope())
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
-    }
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DataSeeder");
+        await DataSeeder.SeedAsync(db, logger);
+}
     else
     {
         app.UseExceptionHandler("/Error");

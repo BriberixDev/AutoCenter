@@ -6,57 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoCenter.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class ModelsRebuild : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_Transmission",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "INTEGER",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_FuelType",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "INTEGER",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_Color",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "INTEGER",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_BodyType",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "INTEGER",
-                oldNullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "OwnerID",
-                table: "Listings",
-                type: "TEXT",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -76,6 +30,8 @@ namespace AutoCenter.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -94,6 +50,19 @@ namespace AutoCenter.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarBrands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarBrands", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,12 +171,93 @@ namespace AutoCenter.Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.UpdateData(
-                table: "Listings",
-                keyColumn: "Id",
-                keyValue: 2,
-                columns: new[] { "OwnerID", "VehicleSpecs_BodyType", "VehicleSpecs_Color", "VehicleSpecs_FuelType", "VehicleSpecs_Transmission" },
-                values: new object[] { null, 4, 2, 1, 2 });
+            migrationBuilder.CreateTable(
+                name: "CarModels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BrandId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarModels_CarBrands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "CarBrands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VehicleSpecs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BrandId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CarModelId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", maxLength: 4, nullable: false),
+                    Mileage = table.Column<int>(type: "INTEGER", nullable: false),
+                    Color = table.Column<int>(type: "INTEGER", nullable: false),
+                    Vin = table.Column<string>(type: "TEXT", maxLength: 17, nullable: false),
+                    Transmission = table.Column<int>(type: "INTEGER", nullable: false),
+                    FuelType = table.Column<int>(type: "INTEGER", nullable: false),
+                    BodyType = table.Column<int>(type: "INTEGER", nullable: false),
+                    CarModelId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VehicleSpecs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VehicleSpecs_CarBrands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "CarBrands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_VehicleSpecs_CarModels_CarModelId",
+                        column: x => x.CarModelId,
+                        principalTable: "CarModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_VehicleSpecs_CarModels_CarModelId1",
+                        column: x => x.CarModelId1,
+                        principalTable: "CarModels",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Listings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    OwnerId = table.Column<string>(type: "TEXT", nullable: true),
+                    VehicleSpecId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Listings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Listings_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Listings_VehicleSpecs_VehicleSpecId",
+                        column: x => x.VehicleSpecId,
+                        principalTable: "VehicleSpecs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -245,6 +295,45 @@ namespace AutoCenter.Web.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarBrands_Name",
+                table: "CarBrands",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarModels_BrandId_Name",
+                table: "CarModels",
+                columns: new[] { "BrandId", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Listings_OwnerId",
+                table: "Listings",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Listings_VehicleSpecId",
+                table: "Listings",
+                column: "VehicleSpecId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VehicleSpecs_BrandId",
+                table: "VehicleSpecs",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VehicleSpecs_CarModelId",
+                table: "VehicleSpecs",
+                column: "CarModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VehicleSpecs_CarModelId1",
+                table: "VehicleSpecs",
+                column: "CarModelId1",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -266,53 +355,22 @@ namespace AutoCenter.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Listings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropColumn(
-                name: "OwnerID",
-                table: "Listings");
+            migrationBuilder.DropTable(
+                name: "VehicleSpecs");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_Transmission",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "INTEGER");
+            migrationBuilder.DropTable(
+                name: "CarModels");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_FuelType",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "INTEGER");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_Color",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "INTEGER");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "VehicleSpecs_BodyType",
-                table: "Listings",
-                type: "INTEGER",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "INTEGER");
-
-            migrationBuilder.UpdateData(
-                table: "Listings",
-                keyColumn: "Id",
-                keyValue: 2,
-                columns: new[] { "VehicleSpecs_BodyType", "VehicleSpecs_Color", "VehicleSpecs_FuelType", "VehicleSpecs_Transmission" },
-                values: new object[] { 3, 1, 0, 1 });
+            migrationBuilder.DropTable(
+                name: "CarBrands");
         }
     }
 }

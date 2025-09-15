@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace AutoCenter.Web.Infrastructure.Data
 {
-    public class AutoCenterDbContext:IdentityDbContext
+    public class AutoCenterDbContext:IdentityDbContext<ApplicationUser>
     {
         public AutoCenterDbContext(DbContextOptions<AutoCenterDbContext> options)
             : base(options)
@@ -16,6 +16,12 @@ namespace AutoCenter.Web.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Brand>(b =>
+            {
+                b.ToTable("CarBrands");
+                b.Property(x => x.Name).IsRequired().HasMaxLength(64);
+                b.HasIndex(x => x.Name).IsUnique();
+            });
             //Brand
             modelBuilder.Entity<Brand>()
                 .Property(b => b.Name)
@@ -59,16 +65,12 @@ namespace AutoCenter.Web.Infrastructure.Data
                 .Property(vs => vs.Vin)
                 .HasMaxLength(17);
 
-            modelBuilder.Entity<VehicleSpec>()
-                .Property(vs => vs.Year)
-                .IsRequired()
-                .HasMaxLength(4);
 
             //Listing
             modelBuilder.Entity<Listing>()
                 .HasOne(l => l.Vehicle)
                 .WithOne()
-                .HasForeignKey<Listing>(l => l.VehicleId)
+                .HasForeignKey<Listing>(l => l.VehicleSpecId)
                 .OnDelete(DeleteBehavior.Cascade);
 
 

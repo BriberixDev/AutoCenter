@@ -1,4 +1,6 @@
-﻿namespace AutoCenter.Web.Dtos.Search
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace AutoCenter.Web.Dtos.Search
 {
     public class SearchFiltersDto
     {
@@ -10,6 +12,9 @@
         public int? MaxPrice { get; set; }
         public int? MinMileage { get; set; }
         public int? MaxMileage { get; set; }
+
+        public IEnumerable<SelectListItem> Brands { get; set; } = Enumerable.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> Models { get; set; } = Enumerable.Empty<SelectListItem>();
 
         public void Normalize()
         {

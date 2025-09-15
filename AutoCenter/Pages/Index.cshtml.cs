@@ -71,7 +71,7 @@ namespace AutoCenter.Pages
                 .OrderBy(m => m.Name)
                 .Select(m => new { m.Id, m.Name })
                 .ToListAsync();
-            return new JsonResult(models);
+            return new JsonResult(models); 
         }
     }
 }

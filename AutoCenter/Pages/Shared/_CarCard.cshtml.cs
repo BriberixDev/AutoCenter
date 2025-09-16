@@ -1,3 +1,4 @@
+using AutoCenter.Web.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,8 +6,8 @@ namespace AutoCenter.Web.Pages.Shared
 {
     public class _CarCardModel
     {
-        private readonly AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext _context;
-        public _CarCardModel(AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext context)
+        private readonly AutoCenterDbContext _context;
+        public _CarCardModel(AutoCenterDbContext context)
         {
             _context = context;
         }

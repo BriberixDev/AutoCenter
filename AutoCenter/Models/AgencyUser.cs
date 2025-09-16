@@ -2,7 +2,7 @@
 
 namespace AutoCenter.Web.Models
 {
-    public class AgencyUser:User
+    public class AgencyUser:ApplicationUser
     {
         public  string AgencyName{ get; set; } = string.Empty;
         public  string AgencyAddress { get; set; } = string.Empty;

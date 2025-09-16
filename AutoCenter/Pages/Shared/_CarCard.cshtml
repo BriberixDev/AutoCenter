@@ -4,7 +4,7 @@
 <div class="card">
     <img src = "~/images/AutoCenterDefault.jpg"  alt="Avatar" style="width:100%"/>
     <div class="container">
-        <h4><b>@Model.VehicleSpecs.Make @Model.VehicleSpecs.Model @Model.VehicleSpecs.Year</b></h4>        
-        <p>Price: @Model.Price.ToString("C") Mileage: @Model.VehicleSpecs.Mileage.ToString() km</p>
+        <h4><b>@Model.Vehicle.Brand.Name @Model.Vehicle.CarModel.Name @Model.Vehicle.Year</b></h4>        
+        <p>Price: @Model.Price.ToString("C") Mileage: @Model.Vehicle.Mileage.ToString() km</p>
     </div>
 </div>

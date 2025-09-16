@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Models;
+using AutoCenter.Web.Infrastructure.Data;
 
 namespace AutoCenter.Web.Pages.Listings
 {
     public class IndexModel : PageModel
     {
-        private readonly AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext _context;
+        private readonly AutoCenterDbContext _context;
 
-        public IndexModel(AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext context)
+        public IndexModel(AutoCenterDbContext context)
         {
             _context = context;
         }

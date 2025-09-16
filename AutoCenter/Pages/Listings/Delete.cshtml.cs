@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using AutoCenter.Web.Infrastructure.Data;
 
 namespace AutoCenter.Web.Pages.Listings
 {
     public class DeleteModel : PageModel
     {
-        private readonly AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext _context;
+        private readonly AutoCenterDbContext _context;
 
-        public DeleteModel(AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext context)
+        public DeleteModel(AutoCenterDbContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace AutoCenter.Web.Pages.Listings
                 return NotFound();
             }
             Listing = await _context.Listings
-    .Include(l => l.VehicleSpecs)
+    .Include(l => l.Vehicle)
     .FirstOrDefaultAsync(m => m.Id == id);
             if (Listing == null)
             {

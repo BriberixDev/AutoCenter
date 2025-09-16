@@ -13,9 +13,9 @@ namespace AutoCenter.Web.Pages.Listings
 {
     public class CreateModel : PageModel
     {
-        private readonly AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext _context;
+        private readonly AutoCenterDbContext _context;
 
-        public CreateModel(AutoCenter.Web.Infrastructure.Data.AutoCenterDbContext context)
+        public CreateModel(AutoCenterDbContext context)
         {
             _context = context;
         }

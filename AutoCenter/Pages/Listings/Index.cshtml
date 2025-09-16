@@ -26,31 +26,31 @@
                 @Html.DisplayNameFor(model => model.Listing[0].IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Make)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Brand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Model)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.CarModel)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Year)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Year)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Color)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Mileage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Color)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Vin)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Mileage)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.Transmission)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Vin)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.FuelType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.Transmission)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.FuelType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Listing[0].VehicleSpecs.BodyType)
+                @Html.DisplayNameFor(model => model.Listing[0].Vehicle.BodyType)
             </th>
             <th></th>
         </tr>
@@ -71,31 +71,31 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Make)
+                    @Html.DisplayFor(modelItem => item.Vehicle.Brand)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Model)
+                    @Html.DisplayFor(modelItem => item.Vehicle.CarModel)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Year)
+                    @Html.DisplayFor(modelItem => item.Vehicle.Year)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Color)
+                    @* @Html.DisplayFor(modelItem => item.Vehicle.Color) *@
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Mileage)
+                    @Html.DisplayFor(modelItem => item.Vehicle.Mileage)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Vin)
+                    @Html.DisplayFor(modelItem => item.Vehicle.Vin)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.Transmission)
+                    @Html.DisplayFor(modelItem => item.Vehicle.Transmission)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.FuelType)
+                    @Html.DisplayFor(modelItem => item.Vehicle.FuelType)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.VehicleSpecs.BodyType)
+                    @Html.DisplayFor(modelItem => item.Vehicle.BodyType)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

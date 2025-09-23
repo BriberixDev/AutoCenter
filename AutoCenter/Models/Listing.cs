@@ -22,6 +22,8 @@ namespace AutoCenter.Web.Models
 
         public int VehicleSpecId { get; set; }
         public VehicleSpec Vehicle { get; set; } = null!;
+
+        public ICollection<ListingImage> Images { get; set; } = new List<ListingImage>();
     }
 
 }

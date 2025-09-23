@@ -73,6 +73,19 @@ namespace AutoCenter.Web.Infrastructure.Data
                 .HasForeignKey<Listing>(l => l.VehicleSpecId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //ListingImage
+            modelBuilder.Entity<ListingImage>(b =>
+            {
+                b.Property(x => x.FileName).IsRequired().HasMaxLength(128);
+                b.Property(x => x.ContentType).IsRequired().HasMaxLength(128);
+                b.Property(x => x.RelativePath).IsRequired().HasMaxLength(128);
+                b.HasOne(li => li.Listing)
+                .WithMany(li => li.Images)
+                .HasForeignKey(li => li.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+                
+
 
         }
         //public DbSet<User> Users { get; set; }
@@ -81,6 +94,7 @@ namespace AutoCenter.Web.Infrastructure.Data
         public DbSet<VehicleSpec> VehicleSpecs => Set<VehicleSpec>();
         public DbSet<Brand> CarBrands => Set<Brand>();
         public DbSet<CarModel> CarModels => Set<CarModel>();
+        public DbSet<ListingImage> ListingImages => Set<ListingImage>();
 
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoCenter.Web.Infrastructure.Images;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace AutoCenter.Web.Services.Images
 {
@@ -54,7 +53,7 @@ namespace AutoCenter.Web.Services.Images
             if(string.IsNullOrWhiteSpace(imagePath)) return Task.CompletedTask;
 
             var webroot = _env.WebRootPath ?? throw new InvalidOperationException("WebRoot not set");
-            var absPath = Path.Combine(webroot, imagePath);
+            var absPath = CombineWebroot(webroot, imagePath);
 
             if (File.Exists(absPath))
                 File.Delete(absPath);

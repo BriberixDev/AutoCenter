@@ -9,27 +9,28 @@ namespace AutoCenter.Web.Services
         {
             _env = env;
         }
-        public async Task<string> SaveAsync(IFormFile file, CancellationToken ct = default)
+        public async Task<string> SaveAsync(IFormFile file, string? subfolder = null, CancellationToken ct = default)
         {
-            if(file==null || file.Length == 0)
-                throw new ArgumentException("File is null or empty", nameof(file));
+            if (file is null || file.Length == 0) throw new ArgumentException("File is null or empty", nameof(file));
 
-            var AllowedExtensions = new [] { ".jpg", ".jpeg", ".png", ".webp" };
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!AllowedExtensions.Contains(extension))
-                throw new ArgumentException("Invalid file type.", nameof(file));
+            var allowed = new[] { ".jpg",".jpeg", ".png",".webp"};
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowed.Contains(ext)) throw new ArgumentException("Invalid file type.", nameof(file));
+
             const long maxBytes = 5 * 1024 * 1024;
-            if (file.Length > maxBytes)
-                throw new InvalidOperationException("This file is too big.");
-            var uploads = Path.Combine(_env.WebRootPath, "uploads");
-            if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
-            var fileName = Guid.NewGuid().ToString("N") + extension;
-            var filePath = Path.Combine(uploads, fileName);
-            await using (var stream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-            {
-                await file.CopyToAsync(stream, ct);
-            }
-            return "/uploads/" + fileName;
-        }  
+            if (file.Length > maxBytes) throw new InvalidOperationException("This file is too big");
+
+            var root = Path.Combine(_env.WebRootPath, "uploads", subfolder ?? "", DateTime.UtcNow.ToString("yyyy/MM"));
+            Directory.CreateDirectory(root);
+
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var fullPath = Path.Combine(root, fileName);
+
+            await using var stream = new FileStream(fullPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            await file.CopyToAsync(stream, ct);
+
+            var rel = Path.GetRelativePath(_env.WebRootPath, fullPath).Replace('\\', '/');
+            return "/" + rel;
+        }
     }
 }

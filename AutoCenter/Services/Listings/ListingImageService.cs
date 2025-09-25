@@ -28,9 +28,9 @@ namespace AutoCenter.Web.Services.Listings
             if(input.Count ==0) throw new ArgumentException("No files provided", nameof(files));
 
             var existingCount = await _db.ListingImages.CountAsync(li => li.ListingId == listingId, ct);
-            if(existingCount + input.Count > _opt.MaxFilesPerListing)
+            if(existingCount + input.Count > _opt.MaxPhotos)
             {
-                throw new InvalidOperationException($"Limit {_opt.MaxFilesPerListing} images per listing");
+                throw new InvalidOperationException($"Limit {_opt.MaxPhotos} images per listing");
             }
 
             foreach(var file in input)

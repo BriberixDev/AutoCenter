@@ -28,7 +28,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
             {
                 return Page();
             }
-            var result = await signInManager.PasswordSignInAsync(this.Input.UserName, this.Input.Password, this.Input.RememberMe, false);
+            var result = await signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, false);
             if(result.Succeeded)
             {
                 return RedirectToPage("/Index");
@@ -50,8 +50,8 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
         public class CredentialViewModel
         {
             [Required]
-            [Display(Name = "User Name")]
-            public string UserName { get; set; } = string.Empty;
+            [Display(Name = "Email")]
+            public string Email { get; set; } = string.Empty;
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; } = string.Empty;

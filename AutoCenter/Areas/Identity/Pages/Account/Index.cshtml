@@ -1,0 +1,84 @@
+﻿ @page
+@model AutoCenter.Web.Areas.Identity.Pages.Account.IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container py-4">
+    @if (TempData["StatusMessage"] is string msg && !string.IsNullOrWhiteSpace(msg))
+    {
+        <div class="alert alert-success mb-3">@msg</div>
+    }
+
+    <div class="row g-4">
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    @{
+                        var user = Model.CurrentUser;
+                        var imgSrc = !string.IsNullOrEmpty(Model.ProfileImageDataUri)
+                        ? Model.ProfileImageDataUri
+                        : Url.Content("~/images/default-avatar.png");
+
+                        var displayName = (user is not null &&
+                        (!string.IsNullOrWhiteSpace(user.FirstName) || !string.IsNullOrWhiteSpace(user.LastName)))
+                        ? $"{user?.FirstName} {user?.LastName}".Trim()
+                        : user?.UserName ?? user?.Email ?? "User";
+                    }
+
+                    <img src="@imgSrc" alt="Avatar" class="rounded-circle mb-3" style="width:140px;height:140px;object-fit:cover;" />
+                    <h5 class="card-title mb-1">@displayName</h5>
+                    <div class="text-muted mb-3">@user?.Email</div>
+
+                    @if (user is not null)
+                    {
+                        <div class="small text-muted">
+                            Registrated at: @user.RegistrationDate.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    }
+                </div>
+
+                <div class="card-footer bg-white">
+                    <form method="post" asp-page-handler="UploadAvatar" enctype="multipart/form-data" class="d-flex gap-2">
+                        <input type="file" name="avatar" accept="image/*" class="form-control" />
+                        <button type="submit" class="btn btn-outline-secondary">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="Save">
+                        <div class="mb-3">
+                            <label asp-for="Input.FirstName" class="form-label">Name</label>
+                            <input asp-for="Input.FirstName" class="form-control" />
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.LastName" class="form-label">Surname</label>
+                            <input asp-for="Input.LastName" class="form-control" />
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-light" asp-page="/Index" asp-area="">To Main</a>
+                            <a class="btn btn-outline-secondary" href="/Listings">My Listings</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <partial name="_ValidationSummary" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

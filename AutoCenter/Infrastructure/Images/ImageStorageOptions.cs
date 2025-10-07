@@ -9,6 +9,7 @@
 
         public string[] AllowedContentTypes { get; init; } = new[]
         {
+            "image/jpg",
             "image/jpeg",
             "image/png",
             "image/webp"

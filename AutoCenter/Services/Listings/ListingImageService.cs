@@ -99,5 +99,24 @@ namespace AutoCenter.Web.Services.Listings
 
             
         }
+        public async Task RemoveImagesAsync(int listingId, IEnumerable<int> imageIds, CancellationToken ct)
+        {
+            var ids = imageIds?.ToArray() ?? Array.Empty<int>();
+            if (ids.Length == 0) return;
+            var images = await _db.ListingImages
+                .Where(i => i.ListingId == listingId && ids.Contains(i.Id))
+                .ToListAsync();
+            foreach (var image in images)
+            {
+                var full= Path.Combine(_opt.RootRelativePath,image.FileName);
+                if (File.Exists(full))
+                {
+                    File.Delete(full);
+                }
+            }
+            _db.ListingImages.RemoveRange(images);
+            await _db.SaveChangesAsync(ct);
+        }
     }
 }
+ 

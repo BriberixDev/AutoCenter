@@ -1,9 +1,33 @@
-﻿@page
+﻿@page "{id:int}"
 @model AutoCenter.Web.Pages.Listings.DetailsModel
 
-@{
-    ViewData["Title"] = "Details";
+<h2>Listing Details</h2>
+
+@if (Model.Listing != null)
+{
+    <div>
+        <h3>@Model.Listing.Title</h3>
+        <p>@Model.Listing.Description</p>
+        <p>Price: @Model.Listing.Price €</p>
+
+        <h4>Vehicle</h4>
+        <p>@Model.Listing.Vehicle?.Brand @Model.Listing.Vehicle?.CarModel</p>
+
+        <h4>Images</h4>
+        @if (Model.Listing.Images != null && Model.Listing.Images.Any())
+        {
+            foreach (var img in Model.Listing.Images)
+            {
+                <img src="@img.RelativePath" alt="Listing image" style="max-width:200px;" />
+            }
+        }
+        else
+        {
+            <p>No images uploaded.</p>
+        }
+    </div>
 }
-
-<h1>Details</h1>
-
+else
+{
+    <p>Listing not found.</p>
+}

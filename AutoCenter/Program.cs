@@ -16,7 +16,12 @@ var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
 var cs = $"Data Source={dbPath}";
 
 builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options=>
+{
+    options.Conventions.AuthorizePage("/Listings/Edit");
+    options.Conventions.AuthorizePage("/Listings/Delete");
+    options.Conventions.AuthorizePage("/Listings/Create");
+});
 
 builder.Services.ConfigureApplicationCookie(options=>
 {

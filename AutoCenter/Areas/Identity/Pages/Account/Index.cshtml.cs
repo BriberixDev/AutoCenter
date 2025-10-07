@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoCenter.Web.Areas.Identity.Pages.Account
 {
@@ -11,19 +13,18 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AutoCenterDbContext _context;
 
-        public IndexModel(UserManager<ApplicationUser> userManager)
+        public IndexModel(UserManager<ApplicationUser> userManager, AutoCenterDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
-        // The currently logged in user (populated in OnGetAsync)
         public ApplicationUser? CurrentUser { get; private set; }
-
-        // Base64 string used to render the profile image
         public string? ProfileImageDataUri { get; private set; }
+        public List<Listing> MyListings { get; set; } = new();
 
-        // Model used for editing basic profile info
         [BindProperty]
         public EditInputModel Input { get; set; } = new();
 
@@ -48,6 +49,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 LastName = user.LastName
             };
             SetImage(user);
+            await LoadUserListingsAsync(user.Id);
             return Page();
         }
 
@@ -60,6 +62,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 var u0 = await _userManager.GetUserAsync(User);
                 CurrentUser = u0;
                 SetImage(u0!);
+                await LoadUserListingsAsync(u0!.Id);
                 return Page();
             }
 
@@ -77,6 +80,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
 
                 CurrentUser = user;
                 SetImage(user);
+                await LoadUserListingsAsync(user.Id);
                 return Page();
             }
 
@@ -93,6 +97,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, "File not selected.");
                 CurrentUser = user;
+                await LoadUserListingsAsync(user.Id);
                 SetImage(user);
                 return Page();
             }
@@ -104,6 +109,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, "File too big (max. 2 MB).");
                 CurrentUser = user;
                 SetImage(user);
+                await LoadUserListingsAsync(user.Id);
                 return Page();
             }
 
@@ -114,6 +120,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, "Only JPG/PNG/WebP formats are allowed.");
                 CurrentUser = user;
                 SetImage(user);
+                await LoadUserListingsAsync(user.Id);
                 return Page();
             }
 
@@ -128,6 +135,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, e.Description);
 
                 CurrentUser = user;
+                await LoadUserListingsAsync(user.Id);
                 SetImage(user);
                 return Page();
             }
@@ -143,6 +151,16 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 // Convert profile picture bytes into a Base64 data URI for inline rendering
                 ProfileImageDataUri = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
             }
+        }
+        private async Task LoadUserListingsAsync(string userId)
+        {
+            MyListings = await _context.Listings.AsNoTracking()
+                .Include(l=> l.Vehicle)
+                    .ThenInclude(v => v.Brand)
+                .Include(l => l.Vehicle)
+                    .ThenInclude(v => v.CarModel)
+                .Where(l => l.OwnerId == userId)
+                .ToListAsync();
         }
     }
 }

@@ -1,124 +1,15 @@
-﻿@page "{id:int}"
+﻿@page
 @model AutoCenter.Web.Pages.Listings.EditModel
 
 @{
-    ViewData["Title"] = "Edit listing";
+    ViewData["Title"] = "Edit";
 }
 
-
-<form method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
-
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="row">
-        <div class="col-md-6">
-
-            <div class="mb-3">
-                <label asp-for="Input.Title" class="form-label"></label>
-                <input asp-for="Input.Title" class="form-control" />
-                <span asp-validation-for="Input.Title" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Input.Description" class="form-label"></label>
-                <textarea asp-for="Input.Description" class="form-control" cols="20" rows="7"></textarea>
-                <span asp-validation-for="Input.Description" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Input.Price" class="form-label"></label>
-                <input asp-for="Input.Price" type="number" step="10" class="form-control" />
-                <span asp-validation-for="Input.Price" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Brand</label>
-                <input type="text" class="form-control"
-                       value="@Model.Listing?.Vehicle?.Brand?.Name" disabled />
-                <input type="hidden" asp-for="Input.BrandId" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Model</label>
-                <input type="text" class="form-control"
-                       value="@Model.Listing?.Vehicle?.CarModel?.Name" disabled />
-                <input type="hidden" asp-for="Input.ModelId" />
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Year</label>
-                    <input type="text" class="form-control"
-                           value="@Model.Listing?.Vehicle?.Year" readonly />
-                    <input type="hidden" asp-for="Input.Year" />
-                </div>
-            </div>
-                
-
-                <div class="col-md-4 mb-3">
-                    <label asp-for="Input.Mileage" class="form-label"></label>
-                    <input asp-for="Input.Mileage" class="form-control" />
-                    <span asp-validation-for="Input.Mileage" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label asp-for="Input.Transmission" class="form-label"></label>
-                    <select asp-for="Input.Transmission"
-                            asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.TransmissionType>()"
-                            class="form-select">
-                        <option value="">— Choose transmission —</option>
-                    </select>
-                    <span asp-validation-for="Input.Transmission" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label asp-for="Input.FuelType" class="form-label"></label>
-                    <select asp-for="Input.FuelType"
-                            asp-items="Html.GetEnumSelectList<AutoCenter.Web.Enums.FuelType>()"
-                            class="form-select">
-                        <option value="">— Choose fuel —</option>
-                    </select>
-                    <span asp-validation-for="Input.FuelType" class="text-danger"></span>
-                </div>
-
-               
-            </div>
-        <h5 class="mt-4">Текущие фото</h5>
-        @if (Model.ExistingImages?.Count > 0)
-        {
-            <div class="row g-3">
-                @foreach (var img in Model.ExistingImages)
-                {
-                    <div class="col-6 col-md-3">
-                        <div class="card shadow-sm">
-                            <img src="@Url.Content("~/" + img.RelativePath.Replace("\\", "/"))" class="card-img-top" alt="photo @img.Id" />
-                            <div class="card-body">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="DeleteImageIds" value="@img.Id" id="del_@img.Id" />
-                                    <label class="form-check-label" for="del_@img.Id">Удалить</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p class="text-muted">Фото пока нет.</p>
-        }
-        <h5 class="mt-4">Добавить новые фото</h5>
-        <p class="text-muted">Максимум @Model.MaxPhotos. Размер файла ≤ @Model.MaxFileSizeInMb МБ. Разрешённые типы — из конфигурации.</p>
-        <div class="mb-3">
-            <input asp-for="Photos" type="file" multiple class="form-control" />
-            <span asp-validation-for="Photos" class="text-danger"></span>
-        </div>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-page="./Details" asp-route-id="@Model.Id" class="btn btn-secondary ms-2">Отмена</a>
-        </div>
-
+<h1>Edit</h1>
+<form method="post">
+    <partial name="_ListingForm" model="Model.Listing" />
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
+<h4>Listing</h4>
+<hr />
+

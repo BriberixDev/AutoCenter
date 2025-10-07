@@ -16,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
         public DateTime RegistrationDate { get; private set; } = DateTime.UtcNow;
 
         public List<Listing> Listings { get; set; } = new();
+        public List<Favourite> Favourites { get; set; } = new();
     }
     }
 

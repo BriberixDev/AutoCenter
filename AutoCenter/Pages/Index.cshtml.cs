@@ -52,6 +52,7 @@ namespace AutoCenter.Pages
 
             var query = _context.Listings
                 .AsNoTracking()
+                .Include(l => l.Images)
                 .Include(l => l.Vehicle).ThenInclude(vs => vs.Brand)
                 .Include(l => l.Vehicle).ThenInclude(vs => vs.CarModel)
                 .Where(l => l.IsActive)

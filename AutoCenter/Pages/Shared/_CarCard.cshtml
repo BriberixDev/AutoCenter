@@ -1,10 +1,36 @@
 ﻿@model AutoCenter.Web.Models.Listing
 @{
+    var imgPath = Model?.Images?
+        .OrderByDescending(i => i.IsPrimary)
+        .Select(i => i.RelativePath)
+        .FirstOrDefault();
+
+    string Normalize(string? p) =>
+        string.IsNullOrWhiteSpace(p) ? "/images/AutoCenterDefault.jpg"
+        : p.StartsWith("/") ? p
+        : $"/{p}";
+
+    var imgUrl = Url.Content(Normalize(imgPath));
+
+    var brand = Model?.Vehicle?.Brand?.Name ?? "—";
+    var model = Model?.Vehicle?.CarModel?.Name ?? "";
+    var year = Model?.Vehicle?.Year.ToString() ?? "";
+    var title = (brand + " " + model).Trim();
+    var price = Model?.Price ?? 0m;
 }
-<div class="card">
-    <img src = "~/images/AutoCenterDefault.jpg"  alt="Avatar" style="width:100%"/>
-    <div class="container">
-        <h4><b>@Model.Vehicle.Brand.Name @Model.Vehicle.CarModel.Name @Model.Vehicle.Year</b></h4>        
-        <p>Price: @Model.Price.ToString("C") Mileage: @Model.Vehicle.Mileage.ToString() km</p>
+
+<div class="card shadow-sm">
+    <a class="stretched-link"
+       asp-page="/Listings/Details"
+       asp-route-id="@Model.Id"></a>
+
+    <img src="@imgUrl"
+         alt="@title"
+         class="img-fluid car-card-photo"
+         onerror="this.onerror=null;this.src='/images/AutoCenterDefault.jpg';" />
+
+    <div class="container py-2">
+        <h4 class="mb-1"><b>@title @(!string.IsNullOrEmpty(year) ? $"({year})" : "")</b></h4>
+        <p class="mb-0">Cena: €@price.ToString("N0")</p>
     </div>
 </div>

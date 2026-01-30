@@ -1,0 +1,50 @@
+﻿@using AutoCenter.Web.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    string imgSrc = Url.Content("~/images/default-avatar.png");
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = await UserManager.GetUserAsync(User);
+        if (currentUser?.ProfilePicture is { Length: > 0 })
+        {
+            var base64 = Convert.ToBase64String(currentUser.ProfilePicture);
+            imgSrc = $"data:image/png;base64,{base64}";
+        }
+    }
+}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
+        <div class="container py-1">
+            <a class="navbar-brand d-flex align-items-center" asp-page="/Home">
+                <span class="fw-bold text-light fs-4">AutoCenter</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link text-light" asp-page="/Home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" asp-page="/Listings/SearchListings">Buy</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" asp-page="/News">News</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" asp-page="/Favourites">Favourites</a></li>
+                    <li class="nav-item d-flex align-items-center ms-lg-3">
+                        <a asp-area="Identity" asp-page="/Account/Index">
+                            <img src="@imgSrc"
+                                 alt="Profile"
+                                 class="rounded-circle border border-light"
+                                 height="40" width="40"
+                                 style="object-fit:cover;cursor:pointer;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height:75px;"></div> 
+</header>

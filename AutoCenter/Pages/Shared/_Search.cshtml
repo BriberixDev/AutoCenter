@@ -1,94 +1,185 @@
 ﻿@model AutoCenter.Web.Dtos.Search.SearchFiltersDto
-@{
-}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
+<form method="get" class="card shadow-sm mb-3 border-0">
+    <div class="card-body">
+        <div class="d-flex mb-3 align-items-center">
+            <h5 class="m-0">Search</h5>
+            <span class="text-muted small ms-2">Brand, Model, Year, Price, Mileage</span>
+        </div>
 
-<form method="get" class="mb-3">
-    <button class="btn btn-primary mt-2" type="submit">Search</button>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label asp-for="BrandId" class="form-label">Brand</label>
+                <select asp-for="BrandId" asp-items="Model.Brands" class="form-select">
+                    <option value="">All Brands</option>
+                </select>
+                <span class="form-text">Firstly choose brand — after model</span>
+            </div>
 
-    <div class="col-md-4">
-        <label asp-for="BrandId" class="form-label">Brand</label>
-        <select asp-for="BrandId"
-                asp-items="Model.Brands"
-                class="form-select"
-                id="BrandId">
-            <option value="">Any brand</option>
-        </select>
-    </div>
+            <div class="col-12 col-md-4">
+                <label asp-for="ModelId" class="form-label">Model</label>
+                <div class="position-relative">
+                    <select class="form-select" asp-for="ModelId" id="ModelId"
+                            disabled="@(!Model.BrandId.HasValue)">
+                        @if (Model.Models?.Any() == true)
+                        {
+                            <option value="">Any model</option>
+                            @foreach (var m in Model.Models)
+                            {
+                                <option value="@m.Value">@m.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="">Any model</option>
+                        }
+                    </select>
+                    <div id="ModelSpinner" class="position-absolute top-50 end-0 translate-middle-y pe-3 d-none">
+                        <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="col-md-4">
-        <label asp-for="ModelId" class="form-label">Model</label>
-        <select class="form-select"
-                asp-for="ModelId"
-                id="ModelId"
-                    disabled>
-            <option value="" disabled selected>Any Model</option>
-            @if(Model.Models?.Any() == true)
-            {
-                foreach (var m in Model.Models)
-                {
-                    <option value="@m.Value">@m.Text</option>
-                }
-            }
-        </select>
-    </div>
+            <div class="col-6 col-md-2">
+                <label asp-for="MinYear" class="form-label">Min Year</label>
+                <input asp-for="MinYear" type="number" class="form-control"
+                       min="1980" max="2025" step="1" inputmode="numeric" placeholder="2010" />
+            </div>
+            <div class="col-6 col-md-2">
+                <label asp-for="MaxYear" class="form-label">Max Year</label>
+                <input asp-for="MaxYear" type="number" class="form-control"
+                       min="1980" max="2025" step="1" inputmode="numeric" placeholder="2023" />
+            </div>
 
-    <div class="form-group">
-        <label asp-for="MinYear" class="control-label"></label>
-        <input asp-for="MinYear" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MaxYear" class="control-label"></label>
-        <input asp-for="MaxYear" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MinPrice" class="control-label"></label>
-        <input asp-for="MinPrice" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MaxPrice" class="control-label"></label>
-        <input asp-for="MaxPrice" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MinMileage"  class="control-label"></label>
-        <input asp-for="MinMileage" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MaxMileage" class="control-label"></label>
-        <input asp-for="MaxMileage" class="form-control" />
+            <div class="col-6 col-md-2">
+                <label asp-for="MinPrice" class="form-label">Min price</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input asp-for="MinPrice" type="number" class="form-control"
+                           min="0" max="500000" step="100" inputmode="numeric" placeholder="from" />
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <label asp-for="MaxPrice" class="form-label">Max price</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input asp-for="MaxPrice" type="number" class="form-control"
+                           min="0" max="500000" step="100" inputmode="numeric" placeholder="to" />
+                </div>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <label asp-for="MinMileage" class="form-label">Min mileage</label>
+                <div class="input-group">
+                    <input asp-for="MinMileage" type="number" class="form-control"
+                           min="0" max="999" step="10" inputmode="numeric" placeholder="from" />
+                    <span class="input-group-text">k. km</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <label asp-for="MaxMileage" class="form-label">Max mileage</label>
+                <div class="input-group">
+                    <input asp-for="MaxMileage" type="number" class="form-control"
+                           min="0" max="999" step="10" inputmode="numeric" placeholder="to" />
+                    <span class="input-group-text">k. km</span>
+                </div>
+            </div>
+
+            <div class="col-12 d-flex gap-2 mt-1">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <a class="btn btn-outline-secondary" href="@Context.Request.Path">Reset</a>
+
+                <div class="form-check ms-auto">
+                    <input class="form-check-input" type="checkbox" id="autoSubmitToggle" checked>
+                    <label class="form-check-label" for="autoSubmitToggle">Autosubmit</label>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
-
 <script>
-    (function () {
+    (() => {
       const brand = document.getElementById('BrandId');
       const model = document.getElementById('ModelId');
+      const spin  = document.getElementById('ModelSpinner');
+      const form  = brand?.closest('form');
+      const auto  = document.getElementById('autoSubmitToggle');
 
-      function resetModels() {
-        model.innerHTML = '<option value="">Any model</option>';
+      if (!brand || !model || !form) return;
+
+      function showSpinner(v){ if (spin) spin.classList.toggle('d-none', !v); }
+      function resetModels(placeholder) {
+        model.innerHTML = '';
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = placeholder || 'Any model';
+        model.appendChild(opt);
+        model.value = '';
       }
-         if (brand.value) {
-      model.disabled = false;
-    }
+
+      async function loadModels(brandId, doSubmitAfter = false) {
+        resetModels('Loading…');
+        model.disabled = true;
+        showSpinner(true);
+        try {
+          const resp = await fetch(`?handler=Models&brandId=${encodeURIComponent(brandId)}`);
+          if (!resp.ok) throw new Error('Bad response');
+          const data = await resp.json(); // [{ id, name }]
+          resetModels('Any model');
+          for (const m of data) {
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = m.name;
+            model.appendChild(opt);
+          }
+          model.disabled = false;
+          if (doSubmitAfter && auto.checked) debouncedSubmit();
+        } catch { resetModels('Failed to load'); }
+        finally { showSpinner(false); }
+      }
+
+      (function init() {
+        const brandHasValue = !!brand.value;
+        const hasServerModels = model.options.length > 1;
+        if (brandHasValue && !hasServerModels) loadModels(brand.value, false);
+        else model.disabled = !brandHasValue;
+      })();
 
       brand.addEventListener('change', async function () {
         const id = this.value;
-        resetModels();
-
-        if (!id) return;
-
-        const resp = await fetch(`?handler=Models&brandId=${encodeURIComponent(id)}`, { method: 'GET' });
-        if (!resp.ok) return;
-
-        const data = await resp.json();
-        for (const m of data) {
-          const opt = document.createElement('option');
-          opt.value = m.id;
-          opt.textContent = m.name;
-          model.appendChild(opt);
+        if (!id) {
+          resetModels('Any model');
+          model.disabled = true;
+          if (auto.checked) debouncedSubmit();
+          return;
         }
-        model.value = '';
-        model.disabled = false;
+        await loadModels(id, true);
+      });
+      let t = null;
+      const debouncedSubmit = () => {
+        clearTimeout(t);
+        t = setTimeout(() => form.requestSubmit(), 300);
+      };
+
+
+      const fields = form.querySelectorAll('input, select');
+      fields.forEach(el => {
+        const on = () => { if (auto.checked) debouncedSubmit(); };
+
+        if (el.type === 'number' && (el.min || el.max)) {
+          el.addEventListener('blur', () => {
+            const v = parseInt(el.value);
+            if (isNaN(v)) return;
+            if (el.min && v < el.min) el.value = el.min;
+            if (el.max && v > el.max) el.value = el.max;
+          });
+        }
+
+        if (el.type === 'checkbox' || el.tagName === 'SELECT')
+          el.addEventListener('change', on);
+        else
+          el.addEventListener('input', on);
       });
     })();
 </script>

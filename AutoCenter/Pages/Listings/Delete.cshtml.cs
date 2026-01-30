@@ -63,7 +63,7 @@ namespace AutoCenter.Web.Pages.Listings
             if (listing.OwnerId != currentUserId)
                 return Forbid();
 
-            _context.Listings.Remove(Listing);
+            _context.Listings.Remove(listing);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
         }

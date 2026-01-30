@@ -1,14 +1,14 @@
 ﻿@page "{id:int}"
 @model AutoCenter.Web.Pages.Listings.DetailsModel
 
-<h2>Listing Details</h2>
+<h2>@Model.Listing?.Title</h2>
 
 @if (Model.Listing != null)
 {
-    <div>
+    <div class="mb-4">
         <h3>@Model.Listing.Title</h3>
         <p>@Model.Listing.Description</p>
-        <p>Price: @Model.Listing.Price €</p>
+        <p><strong>Price:</strong> @Model.Listing.Price €</p>
 
         <h4>Vehicle</h4>
         <p>@Model.Listing.Vehicle?.Brand @Model.Listing.Vehicle?.CarModel</p>
@@ -16,10 +16,18 @@
         <h4>Images</h4>
         @if (Model.Listing.Images != null && Model.Listing.Images.Any())
         {
-            foreach (var img in Model.Listing.Images)
-            {
-                <img src="@img.RelativePath" alt="Listing image" style="max-width:200px;" />
-            }
+            <div class="gallery d-flex flex-wrap gap-2">
+                @foreach (var image in Model.Listing.Images)
+                {
+                    <a href="@image.RelativePath"
+                       class="glightbox"
+                       data-gallery="listing-@Model.Listing.Id">
+                        <img src="@image.RelativePath"
+                             alt="Car picture"
+                             class="img-thumbnail gallery-thumb" />
+                    </a>
+                }
+            </div>
         }
         else
         {

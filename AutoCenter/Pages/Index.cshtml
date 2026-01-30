@@ -1,31 +1,32 @@
-﻿@page
+﻿@page "/SearchListings"
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "AutoCenter – Find your next car";
 }
-<partial name="_Search" model="Model.Filters"/>
 
-<div class="table-responsive">
-    <div class="car-gallery">
+<div class="search-container">
+    <div class="search-header">
+        <h5>Find Your Next Car</h5>
+        <span class="text-muted small">Over @Model.Listings.Count results</span>
+    </div>
+
+    <div class="search-form">
+        <partial name="_Search" model="Model.Filters" />
+    </div>
+
+    <div class=car-gallery>
         @if (Model.Listings?.Any() == true)
         {
-            @foreach (var listing in Model.Listings)
+            foreach (var listing in Model.Listings)
             {
                 @await Html.PartialAsync("_CarCard", listing)
             }
         }
         else
         {
-            <div class="alert alert-info my-3">No listings yet.</div>
+            <div class="alert alert-light border text-center py-4">
+                <h6 class="mb-0 text-muted">No listings found</h6>
+            </div>
         }
-    </div>
-</div>
-
-<div id="myModal" class="modal">
-    <span class="close cursor" onclick="closeModal()">&times;</span>
-    <div class="modal-content">
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        <div class="caption-container"><p id="caption"></p></div> 
     </div>
 </div>

@@ -1,0 +1,20 @@
+﻿@{
+    var errors = ViewContext?.ViewData?.ModelState?
+        .Where(kv => kv.Value != null && kv.Value.Errors.Any())
+        .SelectMany(kv => kv.Value!.Errors)
+        .Select(e => e.ErrorMessage)
+        .Where(m => !string.IsNullOrWhiteSpace(m))
+        .ToList() ?? new List<string>();
+}
+
+@if (errors.Any())
+{
+    <div class="alert alert-danger mt-3">
+        <ul class="mb-0">
+            @foreach (var err in errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+}

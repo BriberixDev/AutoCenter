@@ -5,20 +5,18 @@ using System.ComponentModel.DataAnnotations;
     {
         public class ApplicationUser: IdentityUser
         {
-            //public int Id { get; set; }
+        [MaxLength(64)]
+        public string FirstName { get; set; } = string.Empty;
 
-            //[Required, MaxLength(40)]
-            public required string Name { get; set; }
+        [MaxLength(64)]
+        public string LastName { get; set; } = string.Empty;
 
-            //[Required,EmailAddress, MaxLength(50)]
-            //public  required string Email { get; set; }
+        public byte[]? ProfilePicture { get; set; }
 
-            //public string? PhoneNumber { get; set; }
+        public DateTime RegistrationDate { get; private set; } = DateTime.UtcNow;
 
-            //public bool Role { get; set; }=false;
-
-            public DateTime RegistrationDate { get; private set; } = DateTime.Now;
-
-            public List<Listing> Listings { get; set; } = new ();
-        }
+        public List<Listing> Listings { get; set; } = new();
+        public List<Favourite> Favourites { get; set; } = new();
     }
+    }
+

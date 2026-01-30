@@ -73,6 +73,52 @@ namespace AutoCenter.Web.Infrastructure.Data
                 .HasForeignKey<Listing>(l => l.VehicleSpecId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //ListingImage
+            modelBuilder.Entity<ListingImage>(b =>
+            {
+                b.Property(x => x.FileName).IsRequired().HasMaxLength(128);
+                b.Property(x => x.ContentType).IsRequired().HasMaxLength(128);
+                b.Property(x => x.RelativePath).IsRequired().HasMaxLength(256);
+                b.HasOne(li => li.Listing)
+                .WithMany(li => li.Images)
+                .HasForeignKey(li => li.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(li => li.Listing)
+                   .WithMany(l => l.Images)
+                   .HasForeignKey(li => li.ListingId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasIndex(x => new { x.ListingId, x.SortOrder });
+
+                
+                b.HasIndex(x => new { x.ListingId, x.IsPrimary })
+                    .HasFilter("IsPrimary = 1")
+                    .IsUnique();
+
+                b.HasIndex(x => new { x.ListingId, x.RelativePath }).IsUnique();
+
+
+                //Favourite
+                modelBuilder.Entity<Favourite>(fb =>
+                {
+                    fb.HasKey(f => new { f.OwnerId, f.ListingId });
+                    fb.HasOne(f => f.Owner)
+                        .WithMany(u => u.Favourites)
+                        .HasForeignKey(f => f.OwnerId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    fb.HasOne(f=> f.Listing)
+                        .WithMany(u=>u.Favourites)
+                        .HasForeignKey(f => f.ListingId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
+                    fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                }); 
+            });
+                
+
 
         }
         //public DbSet<User> Users { get; set; }
@@ -81,6 +127,8 @@ namespace AutoCenter.Web.Infrastructure.Data
         public DbSet<VehicleSpec> VehicleSpecs => Set<VehicleSpec>();
         public DbSet<Brand> CarBrands => Set<Brand>();
         public DbSet<CarModel> CarModels => Set<CarModel>();
+        public DbSet<ListingImage> ListingImages => Set<ListingImage>();
+        public DbSet<Favourite> Favourites => Set<Favourite>();
 
     }
 }

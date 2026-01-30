@@ -1,0 +1,62 @@
+﻿@page
+@model AutoCenter.Web.Pages.FavouritesModel
+@{
+    ViewData["Title"] = "Favourites";
+}
+<section class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="m-0">Favourites</h1>
+    <a class="btn btn-primary" asp-page="/Index">Back to Home</a>
+</section>
+
+
+
+@if (Model.Favourites?.Any() == true)
+{
+    <ul class="list-group">
+        @foreach (var item in Model.Favourites)
+        {
+            var imgPath = item.Images?
+            .OrderByDescending(i => i.IsPrimary)
+            .Select(i => i.RelativePath)
+            .FirstOrDefault();
+
+            string Normalize(string? p) =>
+            string.IsNullOrWhiteSpace(p) ? "/images/AutoCenterDefault.jpg"
+            : p!.StartsWith("/") ? p : $"/{p}";
+
+            var imgUrl = Url.Content(Normalize(imgPath));
+            var brand = item.Vehicle?.Brand?.Name ?? "—";
+            var model = item.Vehicle?.CarModel?.Name ?? "";
+            var year = item.Vehicle?.Year.ToString() ?? "";
+            var title = (brand + " " + model).Trim();
+            <li class="list-group-item d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <a asp-page="/Listings/Details" asp-route-id="@item.Id" class="d-inline-block">
+                        <img src="@imgUrl" alt="@title" width="96" height="72"
+                             style="object-fit:cover;border-radius:8px"
+                             onerror="this.onerror=null;this.src='/images/AutoCenterDefault.jpg';" />
+                    </a>
+                    <div>
+                        <a asp-page="/Listings/Details" asp-route-id="@item.Id" class="fw-semibold text-decoration-none">
+                            @title @(!string.IsNullOrEmpty(year) ? $"({year})" : "")
+                        </a>
+                        @if (item.Price > 0)
+                        {
+                            <div class="small">Price: €@item.Price.ToString("N0")</div>
+                        }
+                    </div>
+                </div>
+
+                <form method="post" asp-page-handler="Remove" class="m-0 p-0">
+                    <input type="hidden" name="listingId" value="@item.Id" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="alert alert-info">You have no favourite items.</div>
+}

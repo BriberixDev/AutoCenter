@@ -1,0 +1,28 @@
+﻿@page "/"
+@model AutoCenter.Web.Pages.HomeModel
+@{
+    ViewData["Title"] = "AutoCenter – Find your next car";
+}
+<section class="text-center py-5 bg-light border-bottom">
+    <div class="container py-4">
+        <h1 class="fw-bold display-5 mb-3">AutoCenter</h1>
+        <p class="text-secondary fs-5 mb-4">
+            A modern car marketplace built with ASP.NET Core.
+            Buy, rent, and explore premium vehicles easily.
+        </p>
+
+        <a asp-page="/Listings/SearchListings" class="btn btn-primary btn-lg px-4">
+            <i class="bi bi-search"></i> Search Cars
+        </a>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="fw-semibold mb-4">About This Project</h2>
+        <p class="text-muted fs-5 mx-auto" style="max-width:800px;">
+            AutoCenter is my portfolio project designed to demonstrate full-stack development using ASP.NET Core Razor Pages, Entity Framework, and PostgreSQL.
+            The project includes CRUD listings, user authentication, search filters, image upload, and a responsive UI built on Bootstrap 5.
+        </p>
+    </div>
+</section>

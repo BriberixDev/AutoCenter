@@ -32,9 +32,8 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
             }
             var user = new ApplicationUser
             {
-                UserName = Input.Email,
+                UserName = Input.UserName,
                 Email = Input.Email,
-                Name = Input.Email
             };
             var result = await this.userManager.CreateAsync(user, Input.Password);
             if (result.Succeeded)
@@ -59,6 +58,8 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
     }
     public class RegisterViewModel
     {
+        [Required]
+        public string UserName { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Invalid email adress.")]
         public string Email { get; set; } = string.Empty;

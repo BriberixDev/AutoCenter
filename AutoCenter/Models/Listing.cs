@@ -9,7 +9,7 @@ namespace AutoCenter.Web.Models
         [Required, StringLength(100, MinimumLength = 3)]
         public string Title { get; set; } = string.Empty;
 
-        [StringLength(500, MinimumLength = 10)]
+        [StringLength(5000, MinimumLength = 10)]
         public  string Description { get; set; } = string.Empty;
 
         [Required, Range(1,10_000_000)]
@@ -21,7 +21,14 @@ namespace AutoCenter.Web.Models
         public ApplicationUser Owner { get; set; } = null!;
 
         public int VehicleSpecId { get; set; }
-        public VehicleSpec Vehicle { get; set; } = null!;
+        public VehicleSpec Vehicle { get; set; } = null!; //FIX 
+
+        public ICollection<ListingImage> Images { get; set; } = new List<ListingImage>();
+
+        public ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
+
+        public string MainImagePath =>
+             Images.FirstOrDefault(i=>i.IsPrimary)?.RelativePath ?? "/images/AutoCenterDefault.jpg";
     }
 
 }

@@ -1,10 +1,44 @@
 ﻿@model AutoCenter.Web.Models.Listing
 @{
+    var imgPath = Model?.Images?
+        .OrderByDescending(i => i.IsPrimary)
+        .Select(i => i.RelativePath)
+        .FirstOrDefault();
+
+    string Normalize(string? p) =>
+        string.IsNullOrWhiteSpace(p) ? "/images/AutoCenterDefault.jpg"
+        : p.StartsWith("/") ? p
+        : $"/{p}";
+
+    var imgUrl = Url.Content(Normalize(imgPath));
+
+    var brand = Model?.Vehicle?.Brand?.Name ?? "—";
+    var model1 = Model?.Vehicle?.CarModel?.Name ?? "";
+    var year = Model?.Vehicle?.Year.ToString() ?? "";
+    var title = (brand + " " + model1).Trim();
+    var price = Model?.Price ?? 0m;
 }
-<div class="card">
-    <img src = "~/images/AutoCenterDefault.jpg"  alt="Avatar" style="width:100%"/>
-    <div class="container">
-        <h4><b>@Model.Vehicle.Brand.Name @Model.Vehicle.CarModel.Name @Model.Vehicle.Year</b></h4>        
-        <p>Price: @Model.Price.ToString("C") Mileage: @Model.Vehicle.Mileage.ToString() km</p>
+
+<div class="card car-card">
+    <img src="@imgUrl" alt="@title" class="car-card-photo" />
+    <div class="card-body">
+        <h5 class="card-title">
+            <a asp-page="/Listings/Details" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
+                @title @if (!string.IsNullOrEmpty(year)) { <span class="text-muted">(@year)</span> }
+            </a>
+        </h5>
+        <p class="card-text mb-2">@brand • @model1</p>
+        <p class="price mb-2">€@price.ToString("N0")</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <a asp-page="/Listings/Details" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Details</a>
+
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <form method="post" asp-page="/Favourites" asp-page-handler="Add" class="m-0">
+                    <input type="hidden" name="listingId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-warning">❤</button>
+                </form>
+            }
+        </div>
     </div>
 </div>

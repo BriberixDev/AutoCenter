@@ -1,16 +1,20 @@
 ﻿@page
 @model AutoCenter.Web.Pages.Listings.CreateModel
-
+@Html.AntiForgeryToken()
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create</h1>
 
 <h4>Listing</h4>
 <hr />
-<form method="post">
-    <partial name="_ListingForm" model="Model.Listing" />
+<form method="post" enctype="multipart/form-data">
+    <partial name="_ListingForm" model="Model.Input" />
+    <div class="mb-3">
+        <label class="form-label">Photos (up to @Model.MaxPhotos)</label>
+        <input type="file" name="Photos" multiple class="form-control" accept=".jpg, .jpeg, .png, .webp" />
+        <small class="text-muted">JPEG/PNG/WEBP, Max @AutoCenter.Web.Infrastructure.Images.ImageStorageOptions.DefaultMaxFileSizeInMb MB per file</small>
+    </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 
@@ -19,8 +23,26 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
+
 @section Scripts {
+    <script>
+        document.getElementById('brandSelect')?.addEventListener('change', async (e) => {
+          const brandId = e.target.value;
+          const modelSelect = document.getElementById('modelSelect');
+          modelSelect.innerHTML = '<option value=\"\">— Choose model —</option>';
+          if (!brandId) return;
+          const resp = await fetch('@Url.Page("Create")?handler=Model&brandId=' + brandId);
+          const data = await resp.json();
+          for (const m of data) {
+            const opt = document.createElement('option');
+            opt.value = m.id; opt.textContent = m.name;
+            modelSelect.appendChild(opt);
+          }
+        });
+    </script>
     @{
+        ViewData["BrandOptions"] ??= Model.BrandOptions;
+        ViewData["ModelOptions"] ??= Model.ModelOptions;
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

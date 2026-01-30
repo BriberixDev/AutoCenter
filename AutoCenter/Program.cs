@@ -1,7 +1,11 @@
 using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Infrastructure.Data.Seed;
+using AutoCenter.Web.Infrastructure.Images;
 using AutoCenter.Web.Models;
 using AutoCenter.Web.Services;
+using AutoCenter.Web.Services.Favourites;
+using AutoCenter.Web.Services.Images;
+using AutoCenter.Web.Services.Listings;
 using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +17,22 @@ var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
 var cs = $"Data Source={dbPath}";
 
 builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
+builder.Services.AddRazorPages(options=>
+{
+    options.Conventions.AuthorizePage("/Listings/Edit");
+    options.Conventions.AuthorizePage("/Listings/Delete");
+    options.Conventions.AuthorizePage("/Listings/Create");
+});
 
-builder.Services.AddRazorPages();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
     {
+        options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
         options.Password.RequiredLength = 6;
         options.Password.RequireUppercase = true;
         options.Password.RequireLowercase = true;
-
+        
         options.Lockout.MaxFailedAccessAttempts=5;
         options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(15);
 
@@ -32,12 +43,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.ExpireTimeSpan = TimeSpan.FromDays(14); //Cookie lasts for 14 days
+    options.SlidingExpiration = true;
     options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Error";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
-
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(3);
+});
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SMTP"));
+builder.Services.Configure<ImageStorageOptions>(builder.Configuration.GetSection("ImageStorage"));
+builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
+builder.Services.AddScoped<IListingImageService, ListingImageService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddScoped<IFavouriteService,FavouriteService>();
 
 var app = builder.Build();
 

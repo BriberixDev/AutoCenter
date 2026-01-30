@@ -1,5 +1,6 @@
 using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Models;
+using AutoCenter.Web.Services.Favourites;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,6 @@ namespace AutoCenter.Web.Pages.Shared
 
 
         }
+        
     }
 }

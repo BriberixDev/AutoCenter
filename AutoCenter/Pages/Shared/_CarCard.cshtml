@@ -13,24 +13,32 @@
     var imgUrl = Url.Content(Normalize(imgPath));
 
     var brand = Model?.Vehicle?.Brand?.Name ?? "—";
-    var model = Model?.Vehicle?.CarModel?.Name ?? "";
+    var model1 = Model?.Vehicle?.CarModel?.Name ?? "";
     var year = Model?.Vehicle?.Year.ToString() ?? "";
-    var title = (brand + " " + model).Trim();
+    var title = (brand + " " + model1).Trim();
     var price = Model?.Price ?? 0m;
 }
 
-<div class="card shadow-sm">
-    <a class="stretched-link"
-       asp-page="/Listings/Details"
-       asp-route-id="@Model.Id"></a>
+<div class="card car-card">
+    <img src="@imgUrl" alt="@title" class="car-card-photo" />
+    <div class="card-body">
+        <h5 class="card-title">
+            <a asp-page="/Listings/Details" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
+                @title @if (!string.IsNullOrEmpty(year)) { <span class="text-muted">(@year)</span> }
+            </a>
+        </h5>
+        <p class="card-text mb-2">@brand • @model1</p>
+        <p class="price mb-2">€@price.ToString("N0")</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <a asp-page="/Listings/Details" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Details</a>
 
-    <img src="@imgUrl"
-         alt="@title"
-         class="img-fluid car-card-photo"
-         onerror="this.onerror=null;this.src='/images/AutoCenterDefault.jpg';" />
-
-    <div class="container py-2">
-        <h4 class="mb-1"><b>@title @(!string.IsNullOrEmpty(year) ? $"({year})" : "")</b></h4>
-        <p class="mb-0">Cena: €@price.ToString("N0")</p>
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <form method="post" asp-page="/Favourites" asp-page-handler="Add" class="m-0">
+                    <input type="hidden" name="listingId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-warning">❤</button>
+                </form>
+            }
+        </div>
     </div>
 </div>

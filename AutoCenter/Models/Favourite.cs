@@ -9,7 +9,7 @@
         public int ListingId { get; set; }
         public Listing Listing { get; set; } = null!;
 
-        public DateTime AddedOn { get; private set; } = DateTime.UtcNow;
-        public DateTime AddedOnUtc { get; private set; } = DateTime.UtcNow;
+        public DateTime AddedOn { get;  init; } = DateTime.Now;
+        public DateTime AddedOnUtc { get;  init; } = DateTime.UtcNow;
     }
 }

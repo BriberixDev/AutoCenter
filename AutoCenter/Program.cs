@@ -3,6 +3,7 @@ using AutoCenter.Web.Infrastructure.Data.Seed;
 using AutoCenter.Web.Infrastructure.Images;
 using AutoCenter.Web.Models;
 using AutoCenter.Web.Services;
+using AutoCenter.Web.Services.Favourites;
 using AutoCenter.Web.Services.Images;
 using AutoCenter.Web.Services.Listings;
 using AutoCenter.Web.Settings;
@@ -23,11 +24,6 @@ builder.Services.AddRazorPages(options=>
     options.Conventions.AuthorizePage("/Listings/Create");
 });
 
-builder.Services.ConfigureApplicationCookie(options=>
-{
-    options.ExpireTimeSpan = TimeSpan.FromDays(14); //Cookie lasts for 14 days
-    options.SlidingExpiration = true;
-});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
     {
@@ -47,8 +43,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.ExpireTimeSpan = TimeSpan.FromDays(14); //Cookie lasts for 14 days
+    options.SlidingExpiration = true;
     options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Error";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
@@ -59,6 +57,7 @@ builder.Services.Configure<ImageStorageOptions>(builder.Configuration.GetSection
 builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
 builder.Services.AddScoped<IListingImageService, ListingImageService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddScoped<IFavouriteService,FavouriteService>();
 
 var app = builder.Build();
 

@@ -107,10 +107,14 @@ namespace AutoCenter.Web.Infrastructure.Data
                         .WithMany(u => u.Favourites)
                         .HasForeignKey(f => f.OwnerId)
                         .OnDelete(DeleteBehavior.Cascade);
+
                     fb.HasOne(f=> f.Listing)
                         .WithMany(u=>u.Favourites)
                         .HasForeignKey(f => f.ListingId)
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
+                    fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 }); 
             });
                 

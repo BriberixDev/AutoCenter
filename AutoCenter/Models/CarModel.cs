@@ -11,7 +11,7 @@ namespace AutoCenter.Web.Models
 
 
         public Brand Brand { get; set; } = null!;
-        public VehicleSpec Spec { get; set; } = null!;
+        public ICollection<VehicleSpec> VehicleSpecs { get; set; } = new List<VehicleSpec>();
     }
 }
 

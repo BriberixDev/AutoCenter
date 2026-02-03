@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: autocenter-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: autocenter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: autocenter-api
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - ConnectionStrings__Postgres=Host=postgres;Database=autocenter;Username=postgres;Password=postgres
+      - Seed__DemoListings=true
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

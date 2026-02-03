@@ -31,23 +31,31 @@ namespace AutoCenter.Web.Pages
         }
 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnPostAddAsync(int listingId,string? returnUrl, CancellationToken ct)
+        public async Task<IActionResult> OnPostAddAsync(int listingId, string? returnUrl, CancellationToken ct)
         {
             var userId = _userManager.GetUserId(User);
             if (string.IsNullOrEmpty(userId))
                 return Challenge();
 
-            await _favouriteService.AddFavouriteAsync(listingId, userId, ct);
-            return LocalRedirect(returnUrl ?? Url.Page("/Listings/Index")!);
+            var result = await _favouriteService.AddFavouriteAsync(listingId, userId, ct);
+            if (!result.Succeeded)
+            {
+                TempData["Error"] = result.Error;
+            }
+
+            var safeReturnUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : Url.Page("/Listings/Index");
+            return LocalRedirect(safeReturnUrl!);
 
         }
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostRemoveAsync(int listingId, CancellationToken ct)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user is null) return Challenge();
 
-            await _favouriteService.RemoveFavouriteAsync(listingId, user.Id, ct);
-            TempData["Success"] = "Removed from favourites.";
+            var result = await _favouriteService.RemoveFavouriteAsync(listingId, user.Id, ct);
+            TempData[result.Succeeded ? "Success" : "Error"] =
+                result.Succeeded ? "Removed from favourites." : result.Error;
             return RedirectToPage();
         }
     }

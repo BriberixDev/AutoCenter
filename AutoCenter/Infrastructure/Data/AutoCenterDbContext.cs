@@ -1,9 +1,6 @@
-﻿using AutoCenter.Web.Enums;
-using AutoCenter.Web.Infrastructure.Data.Seed;
-using AutoCenter.Web.Models;
+﻿using AutoCenter.Web.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 
 namespace AutoCenter.Web.Infrastructure.Data
 {
@@ -16,27 +13,17 @@ namespace AutoCenter.Web.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            //Brand
             modelBuilder.Entity<Brand>(b =>
             {
                 b.ToTable("CarBrands");
                 b.Property(x => x.Name).IsRequired().HasMaxLength(64);
                 b.HasIndex(x => x.Name).IsUnique();
+                b.HasMany(a => a.CarModels)
+                    .WithOne(b => b.Brand)
+                    .HasForeignKey(b => b.BrandId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
-            //Brand
-            modelBuilder.Entity<Brand>()
-                .Property(b => b.Name)
-                .IsRequired()
-                .HasMaxLength(64);
-
-            modelBuilder.Entity<Brand>()
-                .HasIndex(b => b.Name)
-                .IsUnique();
-
-            modelBuilder.Entity<Brand>()
-                .HasMany(a=>a.CarModels)
-                .WithOne(b=>b.Brand)
-                .HasForeignKey(b=>b.BrandId)
-                .OnDelete(DeleteBehavior.Restrict);
 
 
             //CarModel
@@ -80,14 +67,9 @@ namespace AutoCenter.Web.Infrastructure.Data
                 b.Property(x => x.ContentType).IsRequired().HasMaxLength(128);
                 b.Property(x => x.RelativePath).IsRequired().HasMaxLength(256);
                 b.HasOne(li => li.Listing)
-                .WithMany(li => li.Images)
-                .HasForeignKey(li => li.ListingId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-                b.HasOne(li => li.Listing)
-                   .WithMany(l => l.Images)
-                   .HasForeignKey(li => li.ListingId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(li => li.Images)
+                    .HasForeignKey(li => li.ListingId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 b.HasIndex(x => new { x.ListingId, x.SortOrder });
 
@@ -97,27 +79,25 @@ namespace AutoCenter.Web.Infrastructure.Data
                     .IsUnique();
 
                 b.HasIndex(x => new { x.ListingId, x.RelativePath }).IsUnique();
-
-
-                //Favourite
-                modelBuilder.Entity<Favourite>(fb =>
-                {
-                    fb.HasKey(f => new { f.OwnerId, f.ListingId });
-                    fb.HasOne(f => f.Owner)
-                        .WithMany(u => u.Favourites)
-                        .HasForeignKey(f => f.OwnerId)
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    fb.HasOne(f=> f.Listing)
-                        .WithMany(u=>u.Favourites)
-                        .HasForeignKey(f => f.ListingId)
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
-                    fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                }); 
             });
-                
+            
+            //Favourite
+            modelBuilder.Entity<Favourite>(fb =>
+            {
+                fb.HasKey(f => new { f.OwnerId, f.ListingId });
+                fb.HasOne(f => f.Owner)
+                    .WithMany(u => u.Favourites)
+                    .HasForeignKey(f => f.OwnerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                fb.HasOne(f => f.Listing)
+                    .WithMany(u => u.Favourites)
+                    .HasForeignKey(f => f.ListingId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
+                fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
 
 
         }

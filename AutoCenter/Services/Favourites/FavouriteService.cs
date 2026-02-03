@@ -1,7 +1,5 @@
 ﻿using AutoCenter.Web.Infrastructure.Data;
 using AutoCenter.Web.Infrastructure.Results;
-using AutoCenter.Web.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoCenter.Web.Services.Favourites
@@ -14,10 +12,10 @@ namespace AutoCenter.Web.Services.Favourites
         {
             _db = db;
         }
-        public async Task<Result> AddFavouriteAsync(int listingId, string UserId, CancellationToken ct)
+        public async Task<Result> AddFavouriteAsync(int listingId, string userId, CancellationToken ct)
         {
             var exists = await _db.Favourites
-                .AnyAsync(f => f.ListingId == listingId && f.OwnerId == UserId, ct);
+                .AnyAsync(f => f.ListingId == listingId && f.OwnerId == userId, ct);
             if (exists)
             {
                 return Result.Fail("Listing is already in favourites");
@@ -33,30 +31,28 @@ namespace AutoCenter.Web.Services.Favourites
             _db.Favourites.Add(new Models.Favourite
             {
                 ListingId = listingId,
-                OwnerId = UserId,
-                AddedOn = DateTime.Now,
+                OwnerId = userId,
                 AddedOnUtc = DateTime.UtcNow
             });
             await _db.SaveChangesAsync(ct);
             return Result.Ok();
         }
-        public async Task<Result> RemoveFavouriteAsync(int listingId, string UserId, CancellationToken ct)
+        public async Task<Result> RemoveFavouriteAsync(int listingId, string userId, CancellationToken ct)
         {
-           var favourites = await _db.Favourites
-                .Where(f => f.ListingId == listingId && f.OwnerId == UserId)
-                .ToListAsync(ct);
-            if (!favourites.Any())
+            var favourite = await _db.Favourites
+                .FirstOrDefaultAsync(f => f.ListingId == listingId && f.OwnerId == userId, ct);
+            if (favourite is null)
             {
                 return Result.Fail("Listing is not in favourites");
             }
-            _db.Favourites.RemoveRange(favourites);
+            _db.Favourites.Remove(favourite);
             await _db.SaveChangesAsync(ct);
             return Result.Ok();
         }
-        public async Task<bool> IsFavouriteAsync(int listingId, string UserId, CancellationToken ct = default)
+        public async Task<bool> IsFavouriteAsync(int listingId, string userId, CancellationToken ct = default)
         {
             return await _db.Favourites
-                .AnyAsync(f => f.ListingId == listingId && f.OwnerId == UserId, ct);
+                .AnyAsync(f => f.ListingId == listingId && f.OwnerId == userId, ct);
         }
         public async Task<IReadOnlyList<Listing>> GetUserFavouritesAsync(string userId, CancellationToken ct = default)
         {

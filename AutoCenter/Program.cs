@@ -9,14 +9,35 @@ using AutoCenter.Web.Services.Listings;
 using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+static async Task<bool> CanConnectAsync(string connectionString)
+{
+    try
+    {
+        await using var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+        return true;
+    }
+    catch
+    {
+        return false;
+    }
+}
+var dockerCs = builder.Configuration.GetConnectionString("Postgres");
+var localCs = builder.Configuration.GetConnectionString("PostgresLocal")
+    ?? throw new InvalidOperationException("Connection string 'PostgresLocal' not found.");
 
-var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
-var cs = $"Data Source={dbPath}";
+var connectionString =
+    !string.IsNullOrWhiteSpace(dockerCs) && await CanConnectAsync(dockerCs)
+        ? dockerCs
+        : localCs;
 
-builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
+builder.Services.AddDbContext<AutoCenterDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
 builder.Services.AddRazorPages(options=>
 {
     options.Conventions.AuthorizePage("/Listings/Edit");
@@ -36,7 +57,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options=>
         options.Lockout.MaxFailedAccessAttempts=5;
         options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(15);
 
-        options.SignIn.RequireConfirmedEmail=true;
+        //options.SignIn.RequireConfirmedEmail=true;
+        options.SignIn.RequireConfirmedEmail = !builder.Environment.IsDevelopment();
         options.User.RequireUniqueEmail=true;
     })
     .AddEntityFrameworkStores<AutoCenterDbContext>().AddDefaultTokenProviders();
@@ -61,29 +83,34 @@ builder.Services.AddScoped<IFavouriteService,FavouriteService>();
 
 var app = builder.Build();
 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
+//    await db.Database.MigrateAsync();
+
+//    var brandSeeder = new CarBrandSeeder(db);
+//    await brandSeeder.SeedAsync();
+//    var modelSeeder = new CarModelSeeder(db);
+//    await modelSeeder.SeedAsync();
+//}
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
-    await db.Database.MigrateAsync();
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DataSeeder");
 
-    var brandSeeder = new CarBrandSeeder(db);
-    await brandSeeder.SeedAsync();
-    var modelSeeder = new CarModelSeeder(db);
-    await modelSeeder.SeedAsync();
+    var seedDemoListings = builder.Configuration.GetValue<bool>("Seed:DemoListings");
+    logger.LogWarning("Seed:DemoListings = {SeedDemoListings}", seedDemoListings);
+    await DataSeeder.SeedAsync(db, logger, seedDemoListings);
 }
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AutoCenterDbContext>();
-        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DataSeeder");
-        await DataSeeder.SeedAsync(db, logger);
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
-    else
-    {
-        app.UseExceptionHandler("/Error");
-        app.UseHsts();
-    }
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

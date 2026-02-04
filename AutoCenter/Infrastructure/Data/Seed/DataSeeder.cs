@@ -6,7 +6,7 @@ namespace AutoCenter.Web.Infrastructure.Data.Seed
 {
     public static class DataSeeder
     {
-        public static async Task SeedAsync(AutoCenterDbContext db, ILogger logger)
+        public static async Task SeedAsync(AutoCenterDbContext db, ILogger logger, bool seedDemoListings)
         {
             await db.Database.MigrateAsync();
 
@@ -65,7 +65,7 @@ namespace AutoCenter.Web.Infrastructure.Data.Seed
                 await db.SaveChangesAsync();
             }
 
-            if (!await db.Listings.AnyAsync())
+            if (seedDemoListings && !await db.Listings.AnyAsync())
             {
                 var rnd = new Random(50);
                 var modelsByBrand = await db.CarModels

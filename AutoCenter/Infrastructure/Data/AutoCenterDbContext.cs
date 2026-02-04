@@ -57,7 +57,7 @@ namespace AutoCenter.Web.Infrastructure.Data
 
             modelBuilder.Entity<VehicleSpec>()
                .HasOne(vs => vs.CarModel)
-               .WithMany()
+               .WithMany(cm => cm.VehicleSpecs)
                .HasForeignKey(vs => vs.CarModelId)
                .OnDelete(DeleteBehavior.Restrict);
 
@@ -93,7 +93,7 @@ namespace AutoCenter.Web.Infrastructure.Data
 
                 
                 b.HasIndex(x => new { x.ListingId, x.IsPrimary })
-                    .HasFilter("IsPrimary = 1")
+                    .HasFilter("\"IsPrimary\" = TRUE")
                     .IsUnique();
 
                 b.HasIndex(x => new { x.ListingId, x.RelativePath }).IsUnique();

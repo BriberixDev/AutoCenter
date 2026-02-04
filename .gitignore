@@ -218,3 +218,4 @@ MigrationBackup/
 # Logs
 *.log
 /AutoCenter/Migrations
+/.env

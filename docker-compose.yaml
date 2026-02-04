@@ -4,13 +4,15 @@ services:
   postgres:
     image: postgres:16
     container_name: autocenter-postgres
-    restart: always
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: autocenter
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -19,12 +21,15 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: autocenter-api
-    restart: always
+    restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       - postgres
     environment:
-      - ConnectionStrings__Postgres=Host=postgres;Database=autocenter;Username=postgres;Password=postgres
-      - Seed__DemoListings=true
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Seed__DemoListings: ${SEED_DEMO_LISTINGS}
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     ports:
       - "8080:8080"
 

@@ -9,16 +9,31 @@ using AutoCenter.Web.Services.Listings;
 using AutoCenter.Web.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+static async Task<bool> CanConnectAsync(string connectionString)
+{
+    try
+    {
+        await using var conn = new NpgsqlConnection(connectionString);
+        await conn.OpenAsync();
+        return true;
+    }
+    catch
+    {
+        return false;
+    }
+}
+var dockerCs = builder.Configuration.GetConnectionString("Postgres");
+var localCs = builder.Configuration.GetConnectionString("PostgresLocal")
+    ?? throw new InvalidOperationException("Connection string 'PostgresLocal' not found.");
 
-//var dbPath = Path.Combine(builder.Environment.ContentRootPath, "autocenter.db");
-//var cs = $"Data Source={dbPath}";
-
-//builder.Services.AddDbContext<AutoCenterDbContext>(o => o.UseSqlite(cs));
-var connectionString = builder.Configuration.GetConnectionString("Postgres")
-    ?? throw new InvalidOperationException("Connection string 'Postgres' not found.");
+var connectionString =
+    !string.IsNullOrWhiteSpace(dockerCs) && await CanConnectAsync(dockerCs)
+        ? dockerCs
+        : localCs;
 
 builder.Services.AddDbContext<AutoCenterDbContext>(options =>
     options.UseNpgsql(connectionString));

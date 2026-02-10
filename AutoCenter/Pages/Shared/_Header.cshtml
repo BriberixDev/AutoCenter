@@ -1,14 +1,15 @@
 ﻿@using AutoCenter.Web.Models
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
-@inject SignInManager<ApplicationUser> SignInManager
 
 @{
+    var isAuth = User?.Identity?.IsAuthenticated == true;
     string imgSrc = Url.Content("~/images/default-avatar.png");
 
-    if (SignInManager.IsSignedIn(User))
+    if (isAuth)
     {
         var currentUser = await UserManager.GetUserAsync(User);
+
         if (currentUser?.ProfilePicture is { Length: > 0 })
         {
             var base64 = Convert.ToBase64String(currentUser.ProfilePicture);
@@ -16,6 +17,7 @@
         }
     }
 }
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
         <div class="container py-1">
@@ -23,7 +25,10 @@
                 <span class="fw-bold text-light fs-4">AutoCenter</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -33,18 +38,52 @@
                     <li class="nav-item"><a class="nav-link text-light" asp-page="/Listings/SearchListings">Buy</a></li>
                     <li class="nav-item"><a class="nav-link text-light" asp-page="/News">News</a></li>
                     <li class="nav-item"><a class="nav-link text-light" asp-page="/Favourites">Favourites</a></li>
-                    <li class="nav-item d-flex align-items-center ms-lg-3">
-                        <a asp-area="Identity" asp-page="/Account/Index">
-                            <img src="@imgSrc"
-                                 alt="Profile"
-                                 class="rounded-circle border border-light"
-                                 height="40" width="40"
-                                 style="object-fit:cover;cursor:pointer;">
-                        </a>
-                    </li>
+
+                    @if (isAuth)
+                    {
+                        <li class="nav-item dropdown ms-lg-3 d-flex align-items-center">
+                            <button class="nav-link dropdown-toggle p-0 border-0 bg-transparent"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    aria-label="Account menu">
+                                <img src="@imgSrc"
+                                     alt="Profile"
+                                     class="rounded-circle border border-light"
+                                     height="40" width="40"
+                                     style="object-fit:cover;cursor:pointer;">
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Index">
+                                        Profile
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="px-3">
+                                        <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item ms-lg-3">
+                            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
     </nav>
-    <div style="height:75px;"></div> 
+
+    <div style="height:75px;"></div>
 </header>

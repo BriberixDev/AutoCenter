@@ -22,14 +22,14 @@ body {
 }
 .car-gallery {
     display: flex;
-    flex-wrap: wrap; /* перенос на новую строку, если не помещается */
-    gap: 15px; /* отступы между карточками */
-    justify-content: center; /* по центру */
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
     margin-top: 20px;
 }
 
 .car-card {
-    width: 220px; /* фиксированная ширина */
+    width: 220px;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -42,7 +42,7 @@ body {
     .car-card img {
         width: 100%;
         height: 140px;
-        object-fit: cover; /* чтобы картинка не растягивалась */
+        object-fit: cover;
     }
 
     .car-card h4 {
@@ -53,4 +53,59 @@ body {
     .car-card p {
         margin: 0 0 10px;
         color: #555;
+    }
+.gallery-thumb {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.gallery-thumb:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+/* TODO: cleanup global styles (legacy overrides). Separate page-specific styles into /css/pages. */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-dark {
+    background-color: #111827 !important;
+}
+
+.btn-primary {
+    background-color: #7b61ff;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #674ff0;
+    }
+
+footer {
+    background-color: #111827;
+    color: #ccc;
+}
+
+    footer a {
+        color: #9ca3af;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+.card {
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
     }

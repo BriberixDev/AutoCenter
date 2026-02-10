@@ -3,6 +3,7 @@ using AutoCenter.Web.Infrastructure.Data.Seed;
 using AutoCenter.Web.Infrastructure.Images;
 using AutoCenter.Web.Models;
 using AutoCenter.Web.Services;
+using AutoCenter.Web.Services.Account;
 using AutoCenter.Web.Services.Favourites;
 using AutoCenter.Web.Services.Images;
 using AutoCenter.Web.Services.Listings;
@@ -76,6 +77,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 });
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SMTP"));
 builder.Services.Configure<ImageStorageOptions>(builder.Configuration.GetSection("ImageStorage"));
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
 builder.Services.AddScoped<IListingImageService, ListingImageService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();

@@ -41,7 +41,7 @@ namespace AutoCenter.Web.Areas.Identity.Pages.Account
                 var confirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.PageLink(pageName: "./ConfirmEmail", values: new { userId = user.Id, token = confirmationToken });
 
-                await emailService.SendAsync("autocenter.app.noreply@gmail.com",user.Email,
+                await emailService.SendAsync(user.Email,
                     "Please confirm your email",
                     $"Please click on this link to confirm your email adress: {confirmationLink}");
 

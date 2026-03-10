@@ -97,27 +97,56 @@ namespace AutoCenter.Web.Infrastructure.Data
                     .IsUnique();
 
                 b.HasIndex(x => new { x.ListingId, x.RelativePath }).IsUnique();
-
-
-                //Favourite
-                modelBuilder.Entity<Favourite>(fb =>
-                {
-                    fb.HasKey(f => new { f.OwnerId, f.ListingId });
-                    fb.HasOne(f => f.Owner)
-                        .WithMany(u => u.Favourites)
-                        .HasForeignKey(f => f.OwnerId)
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    fb.HasOne(f=> f.Listing)
-                        .WithMany(u=>u.Favourites)
-                        .HasForeignKey(f => f.ListingId)
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
-                    fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                }); 
             });
-                
+            //Favourite
+            modelBuilder.Entity<Favourite>(fb =>
+            {
+                fb.HasKey(f => new { f.OwnerId, f.ListingId });
+                fb.HasOne(f => f.Owner)
+                    .WithMany(u => u.Favourites)
+                    .HasForeignKey(f => f.OwnerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                fb.HasOne(f => f.Listing)
+                    .WithMany(u => u.Favourites)
+                    .HasForeignKey(f => f.ListingId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                fb.HasIndex(x => new { x.OwnerId, x.ListingId }).IsUnique();
+                fb.Property(x => x.AddedOnUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+            //Review
+            modelBuilder.Entity<Review>(r =>
+            {
+                r.Property(x => x.Comment)
+                    .HasMaxLength(500);
+
+
+                r.Property(x => x.CreatedAt)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                r.HasIndex(x => new { x.AuthorId, x.TargetUserId })
+                    .IsUnique();
+
+                r.HasOne(x =>x.Author)
+                .WithMany(u => u.WrittenReviews)
+                .HasForeignKey(x => x.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                r.HasOne(x => x.TargetUser)
+                    .WithMany(u => u.ReceivedReviews)
+                    .HasForeignKey(x => x.TargetUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+            //Listings for concrete user
+            modelBuilder.Entity<Listing>(l =>
+            {
+                l.HasOne(f => f.Owner)
+                .WithMany(l => l.Listings)
+                .HasForeignKey(k => k.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            });
 
 
         }
@@ -129,6 +158,6 @@ namespace AutoCenter.Web.Infrastructure.Data
         public DbSet<CarModel> CarModels => Set<CarModel>();
         public DbSet<ListingImage> ListingImages => Set<ListingImage>();
         public DbSet<Favourite> Favourites => Set<Favourite>();
-
+        public DbSet<Review> Reviews => Set<Review>();
     }
 }

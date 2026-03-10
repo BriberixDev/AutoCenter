@@ -219,3 +219,5 @@ MigrationBackup/
 *.log
 /AutoCenter/Migrations
 /.env
+/AutoCenter/wwwroot/uploads/listings
+/AutoCenter/wwwroot/images
